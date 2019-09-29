@@ -45,31 +45,33 @@ class instruction():
         KVIQ_inst.instruction(self.win)
         self.PresentText(text='Ready', sound='start')
     
-    def inst_MR(self):
-        self.PresentText(text=u'メンタルローテーション', sound='into_inst_MR')
-        self.components.fixation.draw()
-        self.win.flip()
-        self.PlaySound('MR_fixation')
-        self.PresentImg(img='back_right_0', sound='MR_figure')
-        self.imgDict['back_right_0'].draw()
-        self.components.msg.setText(u'左手→１')
-        self.components.msg.setPos((-250, -300))
-        self.components.msg.draw()
-        self.components.msg.setText(u'３←右手')
-        self.components.msg.setPos((250, -300))
-        self.components.msg.draw()
-        self.win.flip()
-        self.PlaySound('MR_tenkey')
-        self.components.fixation.draw()
-        self.win.flip()
-        self.PlaySound('MR_repeat')
+    def inst_MR(self, timing=None):
+        if timing == 'pre':
+            self.PresentText(text=u'メンタルローテーション', sound='into_inst_MR')
+            self.components.fixation.draw()
+            self.win.flip()
+            self.PlaySound('MR_fixation')
+            self.PresentImg(img='back_right_0', sound='MR_figure')
+            self.imgDict['back_right_0'].draw()
+            self.components.msg.setText(u'左手→１')
+            self.components.msg.setPos((-250, -300))
+            self.components.msg.draw()
+            self.components.msg.setText(u'３←右手')
+            self.components.msg.setPos((250, -300))
+            self.components.msg.draw()
+            self.win.flip()
+            self.PlaySound('MR_tenkey')
+            self.components.fixation.draw()
+            self.win.flip()
+            self.PlaySound('MR_repeat')
         self.PresentText(text='Ready', sound='into_MR')
         self.PlaySound('start')
     
-    def inst_PT(self):
+    def inst_PT(self, timing=None):
         self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_inst_PT')
         event.waitKeys(keyList=['return'])
-        self.PlaySound('inst_PT')
+        if timing == 'pre':
+            self.PlaySound('inst_PT')
         self.PresentText(text='Ready', sound='into_PT')
         self.PlaySound('start')
     
@@ -98,7 +100,7 @@ class instruction():
             elif condition == 'discrete':
                 self.soundDict['FB_discrete'].play()
                 self.viz_circle(self.soundDict['FB_discrete'].getDuration() + 1)
-                self.PresentText(text=' OK!\n  or\nBAD...', sound='FB_discrete_FB')
+                self.PresentText(text=' GOOD!\n  or\nBAD...', sound='FB_discrete_FB')
             else:
                 self.soundDict['FB_NFB'].play()
                 self.viz_circle(self.soundDict['FB_NFB'].getDuration() + 1)

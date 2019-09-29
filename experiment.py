@@ -49,22 +49,24 @@ if day == 'Day1':
 	    handed = 'right'
 	else:
 	    handed = 'both'
+	handedDf.insert(0, 'condition', condition)
 	handedDf.to_csv('result/' + pid + '_FlandarsTest.csv')
 	win.setMouseVisible(False)
 
 	#KVIQ
 	instruction.inst_KVIQ()
 	trigger.SendTrigger('KVIQ_pre')
-	KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed)
+	KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
-	KVIQ_pre_result = KVIQ_pre_result.rename(columns={'visual_response':'visual_pre', 'kinesthetic_response':'kinesthetic_pre'})
+	KVIQ_pre_result.insert(0, 'condition', condition)
 	KVIQ_pre_result.to_csv('result/' + pid + '_KVIQ.csv')
 	win.setMouseVisible(False)
 
 	#MR task
-	instruction.inst_MR()
+	instruction.inst_MR('pre')
 	MR_pre_result = hand_lateralization_task(win, components, 'pre')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
+	MR_pre_result.insert(0, 'condition', condition)
 	MR_pre_result.to_csv('result/' + pid + '_MR.csv')
 
 	#MItask
@@ -72,13 +74,15 @@ if day == 'Day1':
 	trigger.SendTrigger('Mitest_pre')
 	MI_result = Motor_Imagery_task.MI_task(win, components, 'pre')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
+	MI_result.insert(0, 'condition', condition)
 	MI_result.to_csv('result/' + pid + '_MItask.csv')
 
 	#performance test
-	instruction.inst_PT()
+	instruction.inst_PT('pre')
 	trigger.SendTrigger('performance_pre')
-	PT_result = performance_test(win, components, 'pre')
+	PT_result = performance_test(win, components, 'pre', handed)
 	instruction.PresentText(text='Finish', sound='otsukaresama')
+	PT_result.insert(0, 'condition', condition)
 	PT_result.to_csv('result/' + pid + '_PT.csv')
 
 	#rest
@@ -112,15 +116,17 @@ trigger.SendTrigger('Mitest_post')
 MI_result_post = Motor_Imagery_task.MI_task(win, components, day)
 instruction.PresentText(text='Finish', sound='otsukaresama')
 MI_df = pd.read_csv('result/' + pid + '_MItask.csv', index_col=0)
+MI_result_post.insert(0, 'condition', condition)
 pd.concat([MI_df, MI_result_post]).to_csv('result/' + pid + '_MItask.csv')
 
 if day == 'Day3':
 	#performance test
-	instruction.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_PT')
+	instruction.inst_PT()
 	trigger.SendTrigger('performance_post')
-	PT_result_post = performance_test(win, components, 'pre')
+	PT_result_post = performance_test(win, components, 'post', handed)
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	PT_df = pd.read_csv('result/' + pid + '_PT.csv', index_col=0)
+	PT_result_post.insert(0, 'condition', condition)
 	pd.concat([PT_df, PT_result_post]).to_csv('result/' + pid + '_PT.csv')
 
 	#KVIQ
@@ -133,18 +139,18 @@ if day == 'Day3':
 	    handed = 'both'
 	instruction.PresentText(text=u'運動イメージ検査', sound='KVIQ_post')
 	trigger.SendTrigger('KVIQ_post')
-	KVIQ_post_result = KVIQ.KVIQ_proc(win, handed)
+	KVIQ_post_result = KVIQ.KVIQ_proc(win, handed, 'post')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	KVIQ_df = pd.read_csv('result/' + pid + '_KVIQ.csv')
-	KVIQ_df['visual_post'] = KVIQ_post_result['visual_response']
-	KVIQ_df['kinesthetic_post'] = KVIQ_post_result['kinesthetic_response']
-	KVIQ_df.to_csv('result/' + pid + '_KVIQ.csv')
+	KVIQ_post_result.insert(0, 'condition', condition)
+	pd.concat([KVIQ_df, KVIQ_post_result]).to_csv('result/' + pid + '_KVIQ.csv')
 
 	#MR task
 	instruction.inst_MR()
-	MR_post_result = hand_lateralization_task(win, components, 'pre')
+	MR_post_result = hand_lateralization_task(win, components, 'post')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	MR_df = pd.read_csv('result/' + pid + '_MR.csv', index_col=0)
+	MR_post_result.insert(0, 'condition', condition)
 	pd.concat([MR_df, MR_post_result]).to_csv('result/' + pid + '_MR.csv')
 
 trigger.SendTrigger('finish')

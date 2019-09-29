@@ -3,17 +3,16 @@ import itertools
 import pandas as pd
 from experiment_parameter import MIexperiment_components
 
-def performance_test(win, components, timing):
+def performance_test(win, components, timing, handed):
     #DataFrame
+    trial_proc = ('left', 'right') if handed == 'left' else ('right', 'left')
     conditions = list(itertools.product(
         range(components.PTtrial),
-        ('Left', 'Right'),
+        trial_proc,
     ))
     df = pd.DataFrame(
         conditions, columns=('trial', 'hand'))
-    df = df.sample(frac=1)
-    df.reset_index(drop=True, inplace=True)
-
+    
     clock = core.Clock()
 
     components.msg.setText('Start')
@@ -50,9 +49,9 @@ if __name__ == '__main__':
     win = visual.Window(units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
 
-    Ptest_df = performance_test(win, components, 'pre')
+    Ptest_df = performance_test(win, components, 'pre', 'right')
     Ptest_df.to_csv('result/test_Ptest.csv')
 
-    Ptest_df_post = performance_test(win, components, 'post')
+    Ptest_df_post = performance_test(win, components, 'post', 'right')
     PT_df = pd.read_csv('result/test_Ptest.csv', index_col=0)
     pd.concat([PT_df, Ptest_df_post]).to_csv('result/test_Ptest.csv')

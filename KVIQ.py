@@ -32,7 +32,7 @@ def play_sound(sound_list, wait_time):
         soundDict[soundname].play()
         core.wait(soundDict[soundname].getDuration() + time)
 
-def KVIQ_proc(win, handed):
+def KVIQ_proc(win, handed, timing):
     inst = [u'視覚イメージはどれくらいはっきりとイメージできましたか。',
             u'運動した感覚はどれくらいしっかりと感じましたか。']
     choices = [[u'イメージ\nできない',
@@ -46,7 +46,7 @@ def KVIQ_proc(win, handed):
                 u'しっかりと\n感じる',
                 u'運動を行っているのと\n同じくらい、\nしっかりと\n感じる']]
 
-    summary = pd.DataFrame(columns=['hand', 'part', 'visual_response', 'kinesthetic_response'])
+    summary = pd.DataFrame(columns=['hand', 'part', 'VR', 'KR'])
 
     handers = ['left', 'right'] if handed == 'left' else ['right', 'left']
     for i, hand in enumerate(handers):
@@ -67,7 +67,8 @@ def KVIQ_proc(win, handed):
 
             summary = summary.append(series, ignore_index=True)
 
-    return summary 
+    summary['timing'] == 'pre'
+    return summary[['timing', 'hand', 'part', 'VR', 'KR']]
     
 
 if __name__ == '__main__':
