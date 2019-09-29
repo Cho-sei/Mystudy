@@ -80,7 +80,7 @@ if day == 'Day1':
 	#performance test
 	instruction.inst_PT('pre')
 	trigger.SendTrigger('performance_pre')
-	PT_result = performance_test(win, components, 'pre', handed)
+	PT_result = performance_test(win, components, instruction, 'pre', handed)
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	PT_result.insert(0, 'condition', condition)
 	PT_result.to_csv('result/' + pid + '_PT.csv')
@@ -123,7 +123,7 @@ if day == 'Day3':
 	#performance test
 	instruction.inst_PT()
 	trigger.SendTrigger('performance_post')
-	PT_result_post = performance_test(win, components, 'post', handed)
+	PT_result_post = performance_test(win, components, instruction, 'post', handed)
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	PT_df = pd.read_csv('result/' + pid + '_PT.csv', index_col=0)
 	PT_result_post.insert(0, 'condition', condition)

@@ -2,17 +2,15 @@ from psychopy import core, visual, event, sound
 from experiment_parameter import MIexperiment_components
 import KVIQ_inst
 import flandars
+import os
+import pathlib
 
 class instruction():
     def __init__(self, win, components):
         self.win = win
         self.components = components
 
-        soundnameList = ['ex_start', 'ex_flow_into_day1', 'ex_flow_into_day2', 'ex_flow_into_day3', 'into_flandars', 'finish_flandars', 
-                         'otsukaresama', 'viz_ready', 'viz_relax', 'viz_fixation', 'viz_rest', 'inst_cue', 'inst_resting', 'repeat',
-                         'into_inst_training', 'into_inst_MItest', 'start', 'FB_control', 'FB_NFB', 'FB_discrete', 'FB_discrete_FB', 'into_MItest', 
-                         'into_training', 'confirmation', 'KVIQ_post', 'ex_finish', 'ex_finish_all', 'into_MR', 'MR_fixation',
-                         'MR_figure', 'MR_tenkey', 'MR_repeat', 'into_inst_MR', 'into_inst_PT', 'inst_PT', 'into_PT', 'into_rest']
+        soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
         imgnameList = ['proc_day1', 'proc_day2', 'proc_day3', 'back_right_0']
@@ -78,6 +76,7 @@ class instruction():
     def inst_MItest(self, timing=None):
         if timing == 'pre':
             self.PresentText(text=u'運動想起テスト', sound='into_inst_MItest')
+            
             self.PresentText(text='Relax', sound='viz_relax')
             self.PresentText(text=' Left\n  or\nRight', sound='inst_cue')
             self.components.fixation.draw()
