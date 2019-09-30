@@ -7,7 +7,7 @@ import sys
 import itertools
 
 class Trigger(object):
-    def __init__(self, portname='COM8', baudrate=57600):
+    def __init__(self, portname='COM11', baudrate=57600):
         self.ser = serial.Serial(portname, baudrate)
         trigger_thread(self.ser, b'\x00')
         self.TriggerTable = pd.read_csv('trigger_table.csv', index_col=0)

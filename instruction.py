@@ -66,12 +66,12 @@ class instruction():
         self.PlaySound('start')
     
     def inst_PT(self, timing=None):
-        self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_inst_PT')
-        event.waitKeys(keyList=['return'])
         if timing == 'pre':
+            self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_inst_PT')
+            event.waitKeys(keyList=['return'])
             self.PlaySound('inst_PT')
-        self.PresentText(text='Ready', sound='into_PT')
-        self.PlaySound('start')
+        self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_PT')
+        self.PresentText(text='Ready', sound='start')
     
     def inst_MItest(self, timing=None):
         if timing == 'pre':

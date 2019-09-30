@@ -11,7 +11,6 @@ from performance_test import performance_test
 
 
 pid = sys.argv[1]
-day = sys.argv[2]
 
 p_info = pd.read_csv('participants_data.csv')
 condition = p_info[p_info['pid'] == pid]['condition'].item()
@@ -24,7 +23,13 @@ instruction = instruction(win, components)
 
 #--experiment start------------------------------------------------------
 
-instruction.introduction(day)
+components.msg.setText('wait')
+components.msg.draw()
+win.flip()
+
+event.waitKeys(keyList=['space'])
+
+instruction.introduction('Day1')
 
 #flandars handed test
 instruction.inst_flandars()
@@ -50,6 +55,8 @@ PT_result.insert(0, 'condition', condition)
 PT_result.insert(0, 'pid', pid)
 PT_result.to_csv('result/' + pid + '_PT.csv')
 
+event.waitKeys(keyList=['space'])
+
 #KVIQ
 instruction.inst_KVIQ()
 KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
@@ -60,6 +67,7 @@ KVIQ_pre_result.to_csv('result/' + pid + '_KVIQ.csv')
 win.setMouseVisible(False)
 
 #MR task
+instruction.inst_MR('pre')
 MR_pre_result = hand_lateralization_task(win, components, 'pre')
 instruction.PresentText(text='Finish', sound='otsukaresama')
 MR_pre_result.insert(0, 'condition', condition)

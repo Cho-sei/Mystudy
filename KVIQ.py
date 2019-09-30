@@ -67,7 +67,7 @@ def KVIQ_proc(win, handed, timing):
 
             summary = summary.append(series, ignore_index=True)
 
-    summary['timing'] == 'pre'
+    summary['timing'] = timing
     return summary[['timing', 'hand', 'part', 'VR', 'KR']]
     
 

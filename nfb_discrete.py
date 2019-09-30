@@ -46,7 +46,7 @@ class discrete_DataAquisition(BetaInlet):
 			components.fixation.draw()
 			win.flip()
 
-			if 'return' in event.getKeys(keyList=['return']):
+			#if 'return' in event.getKeys(keyList=['return']):
 				
 			core.wait(1)
 			"""

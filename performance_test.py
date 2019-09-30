@@ -19,8 +19,17 @@ def performance_test(win, components, instruction, timing, handed):
     PTime = []
     for i, row in df.iterrows():
         
-        sound = 'lefthand' if row['hand'] == 'left' else 'righthand'
-        instruction.PlaySound(sound, 2)
+        if row['hand'] == 'left':
+            sound = 'lefthand'
+            components.msg.setText(u'左手')
+        else:
+            sound = 'righthand'
+            components.msg.setText(u'右手')
+
+        components.msg.draw()
+        win.flip()
+
+        instruction.PlaySound(sound)
 
         instruction.PlaySound('PT_start')
         t_start = clock.getTime()
@@ -28,8 +37,11 @@ def performance_test(win, components, instruction, timing, handed):
         PTime.append(clock.getTime() - t_start)
 
         if i != len(df)-1:
+            components.msg.setText('Ready')
+            components.msg.draw()
+            win.flip()
             instruction.PlaySound('otsukaresama')
-            core.wait(3)
+            event.waitKeys(keyList=['return'])
             instruction.PlaySound('PT_next')
 
     df['PTime'] = PTime

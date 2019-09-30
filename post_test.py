@@ -12,7 +12,6 @@ from performance_test import performance_test
 
 
 pid = sys.argv[1]
-day = sys.argv[2]
 
 p_info = pd.read_csv('participants_data.csv')
 condition = p_info[p_info['pid'] == pid]['condition'].item()
@@ -23,6 +22,21 @@ win = visual.Window(units='pix', fullscr=True, allowGUI=False)
 components = MIexperiment_components(win)
 instruction = instruction(win, components)
 
+handedDf = pd.read_csv('result/' + pid + '_FlandarsTest.csv')
+if handedDf['response'].sum() < -4:
+    handed = 'left'
+elif handedDf['response'].sum() > 4:
+    handed = 'right'
+else:
+    handed = 'both'
+
+
+components.msg.setText('wait')
+components.msg.draw()
+win.flip()
+
+event.waitKeys(keyList=['space'])
+
 #performance test
 instruction.inst_PT()
 PT_result_post = performance_test(win, components, instruction, 'post', handed)
@@ -32,18 +46,13 @@ PT_result_post.insert(0, 'condition', condition)
 PT_result_post.insert(0, 'pid', pid)
 pd.concat([PT_df, PT_result_post]).to_csv('result/' + pid + '_PT.csv')
 
+event.waitKeys(keyList=['space'])
+
 #KVIQ
-handedDf = pd.read_csv('result/' + pid + '_FlandarsTest.csv')
-if handedDf['response'].sum() < -4:
-    handed = 'left'
-elif handedDf['response'].sum() > 4:
-    handed = 'right'
-else:
-    handed = 'both'
 instruction.PresentText(text=u'運動イメージ検査', sound='KVIQ_post')
 KVIQ_post_result = KVIQ.KVIQ_proc(win, handed, 'post')
 instruction.PresentText(text='Finish', sound='otsukaresama')
-KVIQ_df = pd.read_csv('result/' + pid + '_KVIQ.csv')
+KVIQ_df = pd.read_csv('result/' + pid + '_KVIQ.csv', index_col=0)
 KVIQ_post_result.insert(0, 'condition', condition)
 KVIQ_post_result.insert(0, 'pid', pid)
 pd.concat([KVIQ_df, KVIQ_post_result]).to_csv('result/' + pid + '_KVIQ.csv')
@@ -57,4 +66,4 @@ MR_post_result.insert(0, 'condition', condition)
 MR_post_result.insert(0, 'pid', pid)
 pd.concat([MR_df, MR_post_result]).to_csv('result/' + pid + '_MR.csv')
 
-instruction.inst_finish(day)
+instruction.inst_finish('Day3')
