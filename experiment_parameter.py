@@ -64,11 +64,11 @@ class MIexperiment_components(object):
                 self.dummyList.append(json.loads(f.read()))
         
 
-    def rest(self, win):
+    def rest(self, win, blocknum):
         trigger.SendTrigger('rest')
 
         for time in reversed(range(1, self.rest_duration+1)):
-            self.msg.setText('Rest')
+            self.msg.setText('Rest\n次は、第' + blocknum + 'ブロックです')
             self.msg.draw()
             self.countText.setText(time)
             self.countText.draw()

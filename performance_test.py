@@ -41,6 +41,7 @@ def performance_test(win, components, instruction, timing, handed):
             components.msg.draw()
             win.flip()
             instruction.PlaySound('otsukaresama')
+            instruction.PlaySound('move_tenkey')
             event.waitKeys(keyList=['return'])
             instruction.PlaySound('PT_next')
 
