@@ -1,19 +1,17 @@
 from psychopy import core, visual, event
-from instruction import instruction
 from experiment_parameter import MIexperiment_components
-from streaming import BetaInlet
-import time
-from scipy.signal import detrend
-import csv
-import random
 
 win = visual.Window(
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
 components = MIexperiment_components(win)
 
-for i in range(5):
-	components.msg.setText(random.choice(components.wait_time_list))
-	components.msg.draw()
-	win.flip()
+waitinig_key = True
+while waitinig_key:
+	keys = event.getKeys(keyList=['return'])
+	if 'return' in keys:
+		components.msg.setText('press')
+		components.msg.draw()
+		win.flip()
+		waitinig_key = False
 
-	core.wait(1)
+core.wait(1)

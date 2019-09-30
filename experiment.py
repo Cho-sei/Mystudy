@@ -50,8 +50,18 @@ if day == 'Day1':
 	else:
 	    handed = 'both'
 	handedDf.insert(0, 'condition', condition)
+	handedDf.insert(0, 'pid', pid)
 	handedDf.to_csv('result/' + pid + '_FlandarsTest.csv')
 	win.setMouseVisible(False)
+
+	#performance test
+	instruction.inst_PT('pre')
+	trigger.SendTrigger('performance_pre')
+	PT_result = performance_test(win, components, instruction, 'pre', handed)
+	instruction.PresentText(text='Finish', sound='otsukaresama')
+	PT_result.insert(0, 'condition', condition)
+	PT_result.insert(0, 'pid', pid)
+	PT_result.to_csv('result/' + pid + '_PT.csv')
 
 	#KVIQ
 	instruction.inst_KVIQ()
@@ -59,6 +69,7 @@ if day == 'Day1':
 	KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	KVIQ_pre_result.insert(0, 'condition', condition)
+	KVIQ_pre_result.insert(0, 'pid', pid)
 	KVIQ_pre_result.to_csv('result/' + pid + '_KVIQ.csv')
 	win.setMouseVisible(False)
 
@@ -67,31 +78,29 @@ if day == 'Day1':
 	MR_pre_result = hand_lateralization_task(win, components, 'pre')
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	MR_pre_result.insert(0, 'condition', condition)
+	MR_pre_result.insert(0, 'pid', pid)
 	MR_pre_result.to_csv('result/' + pid + '_MR.csv')
-
-	#MItask
-	instruction.inst_MItest('pre')
-	trigger.SendTrigger('Mitest_pre')
-	MI_result = Motor_Imagery_task.MI_task(win, components, 'pre')
-	instruction.PresentText(text='Finish', sound='otsukaresama')
-	MI_result.insert(0, 'condition', condition)
-	MI_result.to_csv('result/' + pid + '_MItask.csv')
-
-	#performance test
-	instruction.inst_PT('pre')
-	trigger.SendTrigger('performance_pre')
-	PT_result = performance_test(win, components, instruction, 'pre', handed)
-	instruction.PresentText(text='Finish', sound='otsukaresama')
-	PT_result.insert(0, 'condition', condition)
-	PT_result.to_csv('result/' + pid + '_PT.csv')
 
 	#rest
 	instruction.PresentText(text=u'休憩', sound='into_rest')
 	event.waitKeys(keyList=['space'])
 
-	#inst_training
-	instruction.inst_training(condition)
+	#inst_MI
+	instruction.inst_MItest('pre')
 
+#MItask
+instruction.inst_MItest()
+trigger.SendTrigger('Mitest_pre')
+MI_result = Motor_Imagery_task.MI_task(win, components, 'pre')
+instruction.PresentText(text='Finish', sound='otsukaresama')
+MI_result.insert(0, 'day', day)
+MI_result.insert(0, 'condition', condition)
+MI_result.insert(0, 'pid', pid)
+MI_result.to_csv('result/' + pid + '_MItask.csv')
+
+#inst_training
+if day == 'Day1':
+	instruction.inst_training(condition)
 
 #recording baseline
 instruction.inst_resting()
@@ -113,10 +122,12 @@ instruction.PresentText(text='Finish', sound='otsukaresama')
 #MItest
 instruction.inst_MItest()
 trigger.SendTrigger('Mitest_post')
-MI_result_post = Motor_Imagery_task.MI_task(win, components, day)
+MI_result_post = Motor_Imagery_task.MI_task(win, components, 'post')
 instruction.PresentText(text='Finish', sound='otsukaresama')
 MI_df = pd.read_csv('result/' + pid + '_MItask.csv', index_col=0)
+MI_result.insert(0, 'day', day)
 MI_result_post.insert(0, 'condition', condition)
+MI_result_post.insert(0, 'pid', pid)
 pd.concat([MI_df, MI_result_post]).to_csv('result/' + pid + '_MItask.csv')
 
 if day == 'Day3':
@@ -127,6 +138,7 @@ if day == 'Day3':
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	PT_df = pd.read_csv('result/' + pid + '_PT.csv', index_col=0)
 	PT_result_post.insert(0, 'condition', condition)
+	PT_result_post.insert(0, 'pid', pid)
 	pd.concat([PT_df, PT_result_post]).to_csv('result/' + pid + '_PT.csv')
 
 	#KVIQ
@@ -143,6 +155,7 @@ if day == 'Day3':
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	KVIQ_df = pd.read_csv('result/' + pid + '_KVIQ.csv')
 	KVIQ_post_result.insert(0, 'condition', condition)
+	KVIQ_post_result.insert(0, 'pid', pid)
 	pd.concat([KVIQ_df, KVIQ_post_result]).to_csv('result/' + pid + '_KVIQ.csv')
 
 	#MR task
@@ -151,6 +164,7 @@ if day == 'Day3':
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	MR_df = pd.read_csv('result/' + pid + '_MR.csv', index_col=0)
 	MR_post_result.insert(0, 'condition', condition)
+	MR_post_result.insert(0, 'pid', pid)
 	pd.concat([MR_df, MR_post_result]).to_csv('result/' + pid + '_MR.csv')
 
 trigger.SendTrigger('finish')

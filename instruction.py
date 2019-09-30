@@ -75,16 +75,16 @@ class instruction():
     
     def inst_MItest(self, timing=None):
         if timing == 'pre':
-            self.PresentText(text=u'運動想起テスト', sound='into_inst_MItest')
-            
+            self.PresentText(text=u'運動想起テスト', sound='into_inst_MItest')            
             self.PresentText(text='Relax', sound='viz_relax')
             self.PresentText(text=' Left\n  or\nRight', sound='inst_cue')
             self.components.fixation.draw()
             self.win.flip()
             self.PlaySound('viz_fixation')
             self.PresentText(text='Relax', sound='repeat')
-        self.PresentText(text='Ready', sound='into_MItest')
-        self.PlaySound('start')
+        else:
+            self.PresentText(text='Ready', sound='into_MItest')
+            self.PlaySound('start')
     
     def inst_resting(self):
         self.PresentText(text=u'安静時脳波の測定', sound='inst_resting')

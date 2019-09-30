@@ -1,7 +1,9 @@
-,timing,block,hand,RT
-0,pre,0,left,2.5850960203324576
-1,pre,0,right,0.792075138519067
-0,Day2,0,right,8.007028914309558
-1,Day2,0,left,1.0736480831365045
-0,Day3,0,right,29.744504135949683
-1,Day3,0,left,0.9023011554618279
+,pid,condition,timing,block,hand,RT
+0,sha1,control,pre,0,left,2.58509602
+1,sha1,control,pre,0,right,0.792075139
+0,sha1,control,Day1,0,right,1.792075139
+1,sha1,control,Day1,0,left,7.007028914
+0,sha1,control,Day2,0,right,8.007028914
+1,sha1,control,Day2,0,left,1.073648083
+0,sha1,control,Day3,0,right,29.74450414
+1,sha1,control,Day3,0,left,0.902301155

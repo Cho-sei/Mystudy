@@ -1,5 +1,5 @@
-,PTime,Unnamed: 0,hand,timing,trial
-0,6.333515663754042,0.0,Right,pre,0
-1,4.7828456186116455,1.0,Left,pre,0
-0,1.8674388896233722,,Left,pre,0
-1,0.9882649690025573,,Right,pre,0
+,pid,condition,timing,trial,hand,PTime
+0,sha1,control,pre,0,Right,6.333515664
+1,sha1,control,pre,0,Left,4.782845619
+0,sha1,control,post,0,Left,1.86743889
+1,sha1,control,post,0,Right,0.988264969
