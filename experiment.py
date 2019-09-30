@@ -33,14 +33,16 @@ win.flip()
 event.waitKeys(keyList=['space'])
 
 trigger.SendTrigger('start')
-instruction.introduction(day)
 
 #MItest
 if day == 'Day1':
 	#inst_MI
 	instruction.inst_MItest('pre')
+else:
+	instruction.introduction(day)
 
 #MItask
+
 instruction.inst_MItest()
 trigger.SendTrigger('Mitest_pre')
 MI_result = Motor_Imagery_task.MI_task(win, components, 'pre')
@@ -75,10 +77,15 @@ instruction.PresentText(text='Finish', sound='otsukaresama')
 instruction.inst_MItest()
 trigger.SendTrigger('Mitest_post')
 MI_result_post = Motor_Imagery_task.MI_task(win, components, 'post')
-instruction.PresentText(text='Finish', sound='otsukaresama')
 MI_df = pd.read_csv('result/' + pid + '_MItask.csv', index_col=0)
 MI_result_post.insert(0, 'day', day)
 MI_result_post.insert(0, 'condition', condition)
 MI_result_post.insert(0, 'pid', pid)
 pd.concat([MI_df, MI_result_post]).to_csv('result/' + pid + '_MItask.csv')
 
+if day != 'Day3':
+	instruction.inst_finish(day)
+else:
+	instruction.PresentText(text='Finish', sound='otsukaresama')
+
+event.waitKeys(keyList=['space'])

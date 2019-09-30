@@ -1,3 +1,5 @@
 ,pid,condition,day,timing,block,hand,RT
-0,sha3,continuous,Day1,pre,0,left,1.9290125892212018
-1,sha3,continuous,Day1,pre,0,right,0.28891814516373415
+0,sha3,continuous,Day1,pre,0,right,8.102012681918495
+1,sha3,continuous,Day1,pre,0,left,7.403996175658903
+0,sha3,continuous,Day1,post,0,left,1.0806784987325955
+1,sha3,continuous,Day1,post,0,right,0.24442532614557422

@@ -19,16 +19,15 @@ class MIexperiment_components(object):
 
         #parameter
         self.N = 512			
-        self.blockNum = 1
+        self.blockNum = 5
         self.ready_duration = 1
-        self.task_duration = 4
         self.relax_duration = 4
-        self.rest_duration = 10
-        self.trialNum = 1
-        self.baseline_duration = 1
-        self.MItask_trial = 1
-        self.MRtrial = 1
-        self.PTtrial = 1
+        self.rest_duration = 60
+        self.trialNum = 5
+        self.baseline_duration = 180
+        self.MItask_trial = 5
+        self.MRtrial = 3
+        self.PTtrial = 3
         self.FB_duration = 1.5
         self.wait_time_list = [.6, .7, .8, .9, 1]
 
@@ -68,7 +67,7 @@ class MIexperiment_components(object):
         trigger.SendTrigger('rest')
 
         for time in reversed(range(1, self.rest_duration+1)):
-            self.msg.setText('Rest\n次は、第' + blocknum + 'ブロックです')
+            self.msg.setText('Rest\n次は、第' + str(blocknum) + 'ブロックです')
             self.msg.draw()
             self.countText.setText(time)
             self.countText.draw()
