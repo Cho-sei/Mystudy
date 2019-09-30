@@ -50,6 +50,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 
 	for blocks in range(components.blockNum):
 		components.df['block'] = blocks
+		RT = []
 
 		eeg_fname = 'result/' + pid + '_continuous_eeg_' + day + '_b' + str(blocks) + '.csv'
 		ERSP_fname = 'result/' + pid + '_FB_ERSP_' + day + '_b' + str(blocks) + '.csv'
@@ -102,8 +103,9 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 			t_duration = clock.getTime() - t_start
 			ERSP_List = []
 			firstFlag = True
+			waiting_key = True
 
-			while t_duration < components.task_duration:
+			while waiting_key:
 				sample, timestamp = betaIn.update()
 				data_buffer.extend(sample.T[ch])
 				display_buffer = detrend(data_buffer)
@@ -123,6 +125,9 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				win.flip()
 
 				t_duration = clock.getTime() - t_start
+				if 'return' in event.getKeys(keyList=['return']):
+					RT.append(t_duration)
+					waiting_key = False
 
 				pre_data = ERSP
 
@@ -141,6 +146,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				writer = csv.writer(f, lineterminator='\n')
 				writer.writerow('\n')
 
+		components.df['RT'] = RT
 		if blocks == 0:
 			components.df.to_csv(condition_fname, mode='a')
 		else:

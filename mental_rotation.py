@@ -2,7 +2,6 @@ from psychopy import core, visual, event
 import pandas as pd
 import itertools
 import sys
-from trigger import trigger
 from experiment_parameter import MIexperiment_components
 
 def hand_lateralization_task(win, components, timing):
@@ -40,17 +39,6 @@ def hand_lateralization_task(win, components, timing):
         Image.setImage('HandImg/' + row['face'] + '_' + row['hand'] + '_' + str(row['angle']) + '.png')
         Image.draw()
         win.flip()
-
-        if timing == 'pre':
-            if row['hand'] == 'left':
-                trigger.SendTrigger('HLJT_pre_left')
-            else:
-                trigger.SendTrigger('HLJT_pre_right')
-        else:
-            if row['hand'] == 'left':
-                trigger.SendTrigger('HLJT_post_left')
-            else:
-                trigger.SendTrigger('HLJT_post_right')
 
         t_start = clock.getTime()
         key = event.waitKeys(keyList=['1', 'num_1', '3', 'num_3'])

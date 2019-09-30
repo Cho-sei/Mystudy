@@ -32,10 +32,10 @@ class discrete_DataAquisition(BetaInlet):
 		t_start = clock.getTime()
 		t_duration = clock.getTime() - t_start
 
-		print(len(dummy)/(components.task_duration*1000))
 		i = 0
 		pre_time = 0
-		while t_duration < components.task_duration:	
+		waiting_key = True
+		while waiting_key:	
 			sample, timestamp = self.update()
 			if len(sample) != 0:
 				data_buffer.extend(sample.T[electrode])
@@ -46,11 +46,15 @@ class discrete_DataAquisition(BetaInlet):
 			components.fixation.draw()
 			win.flip()
 
+			if 'return' in event.getKeys(keyList=['return']):
+				
+			core.wait(1)
+			"""
 			if t_duration%(components.task_duration/len(dummy)) < 0.02:
 				if (t_duration - pre_time) > 0.05:
 					i += 1
 					pre_time = t_duration
-
+			"""
 		detrend_buffer = detrend(data_buffer)
 		
 		return detrend_buffer

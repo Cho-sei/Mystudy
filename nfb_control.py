@@ -34,6 +34,7 @@ def control_task(win, components, pid, day):
 
 		components.df['block'] = blocks
 
+		RT = []
 		for i, row in components.df.iterrows():
 
 			if row['hand'] == 'left':
@@ -75,18 +76,28 @@ def control_task(win, components, pid, day):
 			t_duration = clock.getTime() - t_start
 
 			j = 0
-			while t_duration < components.task_duration:	
+			waiting_key = True
+			while waiting_key:	
 				components.Circle.setRadius(5*dummy[blocks][i][j] + 300)
 				components.Circle.draw()
 				components.fixation.draw()
-				core.wait(components.task_duration/len(dummy[blocks][i]))
+				core.wait(0.1)
 				win.flip()
-				j += 1
+
+				if j == len(dummy[blocks][i])-1:
+					j = 0
+				else:
+					j += 1
+				
 				t_duration = clock.getTime() - t_start
+				if 'return' in event.getKeys(keyList=['return']):
+					RT.append(t_duration)
+					waiting_key = False
 
 			win.flip()
 			core.wait(components.FB_duration + random.choice(components.wait_time_list))
 
+		components.df['RT'] = RT
 		if blocks == 0:
 			components.df.to_csv(condition_fname, mode='a')
 		else:
