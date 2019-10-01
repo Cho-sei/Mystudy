@@ -1,5 +1,6 @@
 from psychopy import core, visual, event, sound
-from experiment_parameter import MIexperiment_components
+#from experiment_parameter import MIexperiment_components
 
-test = sound.Sound('voicedata/question_visual.wav')
-test.play()
+win = visual.Window(
+		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
+event.waitKeys(keyList=['space'])
