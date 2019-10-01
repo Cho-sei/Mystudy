@@ -18,7 +18,7 @@ class MIexperiment_components(object):
             }
 
         #parameter
-        self.N = 512			
+        self.N = 512
         self.blockNum = 5
         self.ready_duration = 1
         self.relax_duration = 4

@@ -59,8 +59,8 @@ def KVIQ_proc(win, handed, timing):
 
             sound_list = ['MItest_pre']
             sound_list.append('MItest_'+str(j+1)) if j < 2 else sound_list.append('MItest_'+str(j+1)+'_'+hand)
-            sound_list.append('MItest_imagery')
-            play_sound(sound_list, [1, 5, 5])
+            sound_list.append('PT_start', 'MItest_imagery', 'PT_start')
+            play_sound(sound_list, [1, 1, 5, 1, 5])
 
             response = display_ratingscale(win, choices, inst)
             series = pd.Series([hand, j+1, response[0], response[1]], index=summary.columns)

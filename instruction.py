@@ -70,6 +70,8 @@ class instruction():
             self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_inst_PT')
             event.waitKeys(keyList=['return'])
             self.PlaySound('inst_PT')
+            event.waitKeys(keyList=['return'])
+            self.PlaySound('inst_PT_enter')
         self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_PT')
         self.PresentText(text='Ready', sound='start')
     
