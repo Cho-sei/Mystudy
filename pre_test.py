@@ -28,7 +28,7 @@ components.msg.draw()
 win.flip()
 
 event.waitKeys(keyList=['space'])
-"""
+
 instruction.introduction('Day1')
 
 #flandars handed test
@@ -59,7 +59,7 @@ event.waitKeys(keyList=['space'])
 
 #KVIQ
 instruction.inst_KVIQ()
-"""
+
 handed = 'right'
 KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
 instruction.PresentText(text='Finish', sound='otsukaresama')
