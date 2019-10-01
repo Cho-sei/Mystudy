@@ -67,7 +67,10 @@ class MIexperiment_components(object):
         trigger.SendTrigger('rest')
 
         for time in reversed(range(1, self.rest_duration+1)):
-            self.msg.setText('Rest\n次は、第' + str(blocknum) + 'ブロックです')
+            if blocknum < 6:
+                self.msg.setText('Rest\n次は、第' + str(blocknum) + 'ブロックです')
+            else:
+                self.msg.setText('Rest\n次は、運動イメージ課題です')
             self.msg.draw()
             self.countText.setText(time)
             self.countText.draw()

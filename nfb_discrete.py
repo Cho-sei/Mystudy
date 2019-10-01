@@ -167,8 +167,7 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 		else:
 			components.df.to_csv(condition_fname, mode='a', header=False)
 
-		if blocks < components.blockNum - 1:
-			components.rest(win, blocks+2)
+		components.rest(win, blocks+2)
 
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')

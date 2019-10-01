@@ -58,9 +58,7 @@ PT_result.to_csv('result/' + pid + '_PT.csv')
 event.waitKeys(keyList=['space'])
 
 #KVIQ
-instruction.inst_KVIQ()
-
-handed = 'right'
+instruction.inst_KVIQ('pre')
 KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
 instruction.PresentText(text='Finish', sound='otsukaresama')
 KVIQ_pre_result.insert(0, 'condition', condition)

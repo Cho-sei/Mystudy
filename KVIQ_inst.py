@@ -5,7 +5,7 @@ soundnameList = ['KVIQ_inst_start', 'KVIQ_inst_finish', 'KVIQ_inst_eval', 'KVIQ_
 soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
 def instruction(win):
-    inst_text = visual.TextStim(win, u'運動イメージ検査', height=80)
+    inst_text = visual.TextStim(win, u'運動イメージ能力検査', height=80)
     proc_img = []
     proc_sizeList = [[1600, 236.4], [411, 666], [309, 666], [513.6, 667.8], [405, 670.2]]
     proc_posList = [[0, 300], [-580, -150], [-220, -150], [200, -150], [580, -150]]

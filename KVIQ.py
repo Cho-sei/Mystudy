@@ -12,8 +12,9 @@ def display_ratingscale(win, choices, inst):
         soundFlag = True
         inst_text = visual.TextStim(win, instruction, pos=(0.0, 250), height=60)
         ratingScale = visual.RatingScale(
-            win, high=5, size=2.0, labels=False, scale=False, pos=(0.0, -100),
-            showValue=False, acceptPreText=u'バーをクリック', acceptText='OK')
+            win, high=5, size=2.0, labels=False, pos=(0.0, -100), scale=False,
+            showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5,
+            markerStart=3, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return', noMouse=True)
         while ratingScale.noResponse:
             inst_text.draw()
             for j, text in enumerate(content):
@@ -22,13 +23,38 @@ def display_ratingscale(win, choices, inst):
             ratingScale.draw()
             win.flip()
             if soundFlag:
-                play_sound([soundname], [0])
+                soundDict[soundname].play()
                 soundFlag = False
+        soundDict[soundname].stop()
         response.append(ratingScale.getRating())
     return response
 
-def play_sound(sound_list, wait_time):
-    for soundname, time in zip(sound_list, wait_time):
+def play_sound(win, sound_list, wait_time, images=[]):
+    arrow = visual.ShapeStim(
+        win, vertices=((-30, 10), (0, 10), (0, 25), (30, 0), (0, -25), (0, -10), (-30, -10)),
+        fillColor='white', lineColor='white')
+    for i, (soundname, time) in enumerate(zip(sound_list, wait_time)):
+        if i == 0:
+            if len(images) == 2:
+                images[0].setPos((-300, 0))
+                images[0].draw()
+                win.flip()
+        elif i == 1:
+            if len(images) == 2:
+                for i, x_pos in enumerate([-300, 300]):
+                    images[i].setPos((x_pos, 0))
+                    images[i].draw()
+                    arrow.draw()
+            elif len(images) == 4:
+                for i, (x_pos, arrow_pos) in enumerate(zip([-450, -150, 150, 450], [-300, 0, 300, 0])):
+                    images[i].setPos((x_pos, 0))
+                    images[i].draw()
+                    arrow.setPos((arrow_pos, 0))
+                    arrow.draw()
+            win.flip()
+        elif i == 2:
+            win.flip()
+
         soundDict[soundname].play()
         core.wait(soundDict[soundname].getDuration() + time)
 
@@ -45,16 +71,32 @@ def KVIQ_proc(win, handed, timing):
                 u'ある程度\n感じる',
                 u'しっかりと\n感じる',
                 u'運動を行っているのと\n同じくらい、\nしっかりと\n感じる']]
+    imagenameList = ['base-left', 'base-right', '1-left', '1-right', '2-left', '2-right', '3-left', '3-right', '4-left', '4-right',
+                     'index-finger-left', 'index-finger-right', 'middle-finger-left', 'middle-finger-right', 'ring-finger-left',
+                     'ring-finger-right', 'little-finger-left', 'little-finger-right']
+    imageDict = dict([[imagename, visual.ImageStim(win, 'InstImage/' + imagename + '.jpg', size=(200, 411.4))] for imagename in imagenameList])
 
     summary = pd.DataFrame(columns=['hand', 'part', 'VR', 'KR'])
 
     handers = ['left', 'right'] if handed == 'left' else ['right', 'left']
+    
     for i, hand in enumerate(handers):
-        for j, text in enumerate([u'頸部の屈曲・伸展', u'肩甲骨の拳上', u'肩関節の屈曲', u'肘関節の屈曲', u'母指と他指の対立']):
+        
+        img_list = [['base-', '1-'],
+                    ['base-', '2-'],
+                    ['base-', '3-'],
+                    ['base-', '4-'],
+                    ['index-finger-', 'middle-finger-', 'ring-finger-', 'little-finger-']]
+        
+        for k in range(len(img_list)):
+            for l in range(len(img_list[k])):
+                img_list[k][l] = img_list[k][l] + hand
+
+        for j, (text, image) in enumerate(zip([u'頸部の屈曲・伸展', u'肩甲骨の拳上', u'肩関節の屈曲', u'肘関節の屈曲', u'母指と他指の対立'], img_list)):
             if ( i == 1 ) & (j < 2):
                 continue
-            MItext = visual.TextStim(win, text, height=80, bold=True)
-            MItext.draw()
+            MItext = visual.TextStim(win, text, height=80, bold=True, pos=(0, 300))
+            MItext.setAutoDraw(True)
             win.flip()
 
             sound_list = ['MItest_pre']
@@ -62,7 +104,9 @@ def KVIQ_proc(win, handed, timing):
             sound_list.append('PT_start')
             sound_list.append('MItest_imagery')
             sound_list.append('PT_start')
-            play_sound(sound_list, [1, 1, 5, 1, 5])
+
+            #play_sound(win, sound_list, [1, 1, 5, 1, 5], [imageDict[img] for img in image])
+            MItext.setAutoDraw(False)
 
             response = display_ratingscale(win, choices, inst)
             series = pd.Series([hand, j+1, response[0], response[1]], index=summary.columns)
@@ -79,4 +123,4 @@ if __name__ == '__main__':
     win = visual.Window(
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
     
-    KVIQ_proc(win, 'right').to_csv('sha3_KVIQ_post.csv')
+    KVIQ_proc(win, 'right', 'pre')

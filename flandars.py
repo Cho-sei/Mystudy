@@ -3,8 +3,9 @@ import pandas as pd
 
 def display_ratingscale(win, text):
     ratingScale = visual.RatingScale(
-        win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], scale=False, pos=(0.0, -100),
-        showValue=False, acceptPreText=u'バーをクリック', acceptText='OK')
+        win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], pos=(0.0, -100), scale=False,
+        showValue=False, acceptPreText='Enter', acceptText='Enter',
+        markerStart=0, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return', noMouse=True)
     while ratingScale.noResponse:
         text.draw()
         ratingScale.draw()

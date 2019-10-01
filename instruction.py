@@ -33,14 +33,18 @@ class instruction():
         
     def inst_flandars(self):
         ratingScale = visual.RatingScale(
-            self.win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], scale=False, pos=(0.0, -200),
-            showValue=False, acceptPreText=u'バーをクリック', acceptText='OK', noMouse=True)
+            self.win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], pos=(0.0, -200),
+            scale=False, showValue=False, acceptPreText='Enter', acceptText='Enter',
+            markerStart=0, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return',
+            marker=visual.TextStim(win, text=u'「1」 ⇦ ▼ ⇨ 「3」\n\n', units='norm'), noMouse=True)
         ratingScale.draw()
         self.PresentText(text=u'利き手判別テスト', sound='into_flandars')
         self.PresentText(text='Ready', sound='start')
     
-    def inst_KVIQ(self):
-        KVIQ_inst.instruction(self.win)
+    def inst_KVIQ(self, timing=None):
+        if timing == 'pre':
+            KVIQ_inst.instruction(self.win)
+        self.PresentText(text=u'運動イメージ能力検査', sound='into_KVIQ')
         self.PresentText(text='Ready', sound='start')
     
     def inst_MR(self, timing=None):
@@ -62,8 +66,8 @@ class instruction():
             self.components.fixation.draw()
             self.win.flip()
             self.PlaySound('MR_repeat')
-        self.PresentText(text='Ready', sound='into_MR')
-        self.PlaySound('start')
+        self.PresentText(text=u'メンタルローテーション', sound='into_MR')
+        self.PresentText(text='Ready', sound='start')
     
     def inst_PT(self, timing=None):
         if timing == 'pre':
@@ -77,7 +81,7 @@ class instruction():
     
     def inst_MItest(self, timing=None):
         if timing == 'pre':
-            self.PresentText(text=u'運動想起テスト', sound='into_inst_MItest')            
+            self.PresentText(text=u'運動イメージ課題', sound='into_inst_MItest')            
             self.PresentText(text='Relax', sound='viz_relax')
             self.PresentText(text=' Left\n  or\nRight', sound='inst_cue')
             self.components.fixation.draw()
@@ -85,8 +89,8 @@ class instruction():
             self.PlaySound('viz_fixation')
             self.PresentText(text='Relax', sound='repeat')
         else:
-            self.PresentText(text='Ready', sound='into_MItest')
-            self.PlaySound('start')
+            self.PresentText(text=u'運動イメージ課題', sound='into_MItest')
+            self.PresentText(text='Ready', sound='start')
     
     def inst_resting(self):
         self.PresentText(text=u'安静時脳波の測定', sound='inst_resting')
@@ -94,7 +98,8 @@ class instruction():
     
     def inst_training(self, condition=None):
         if condition != None:
-            self.PresentText(text=u'運動想起トレーニング', sound='into_inst_training')
+            self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_inst_training')
+            self.PresentText(text=u'Relax      →      Left or Right      →      +', sound='inst_training_flow')
             if condition == 'control':
                 self.soundDict['FB_control'].play()
                 self.viz_circle(self.soundDict['FB_control'].getDuration() + 1)
@@ -107,8 +112,8 @@ class instruction():
                 self.viz_circle(self.soundDict['FB_NFB'].getDuration() + 1)
             self.PresentText(text='', sound='confirmation')
         else:
-            self.PresentText(text='Ready', sound='into_training')
-            self.PlaySound('start')
+            self.PresentText(text=u'運動イメージ\nトレーニング' sound='into_training')
+            self.PresentText(text='Ready', sound='start')
     
     def inst_finish(self, day):
         if day == 'Day3':
@@ -158,4 +163,4 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
-    instruction.inst_MR()
+    instruction.inst_flandars()
