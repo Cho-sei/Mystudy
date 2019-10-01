@@ -3,7 +3,7 @@ import pandas as pd
 
 soundnameList = ['MItest_pre','MItest_1','MItest_2','MItest_3_right','MItest_3_left',
             'MItest_4_right','MItest_4_left','MItest_5_right','MItest_5_left',
-            'MItest_imagery', 'question_visual', 'question_kinesthetic']
+            'MItest_imagery', 'question_visual', 'question_kinesthetic', 'PT_start']
 soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
 def display_ratingscale(win, choices, inst):
@@ -59,7 +59,9 @@ def KVIQ_proc(win, handed, timing):
 
             sound_list = ['MItest_pre']
             sound_list.append('MItest_'+str(j+1)) if j < 2 else sound_list.append('MItest_'+str(j+1)+'_'+hand)
-            sound_list.append('PT_start', 'MItest_imagery', 'PT_start')
+            sound_list.append('PT_start')
+            sound_list.append('MItest_imagery')
+            sound_list.append('PT_start')
             play_sound(sound_list, [1, 1, 5, 1, 5])
 
             response = display_ratingscale(win, choices, inst)
