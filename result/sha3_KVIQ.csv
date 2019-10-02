@@ -1,9 +1,17 @@
-,Unnamed: 0,hand,part,visual_pre,kinesthetic_pre,visual_post,kinesthetic_post
-0,0,right,1,4,4,3,3
-1,1,right,2,4,5,4,4
-2,2,right,3,3,4,3,4
-3,3,right,4,3,4,3,4
-4,4,right,5,3,4,4,3
-5,5,left,3,3,4,4,4
-6,6,left,4,4,4,4,3
-7,7,left,5,4,4,3,4
+,pid,condition,timing,hand,part,VR,KR
+0,sha3,continuous,pre,right,1,3,3
+1,sha3,continuous,pre,right,2,3,3
+2,sha3,continuous,pre,right,3,3,3
+3,sha3,continuous,pre,right,4,3,3
+4,sha3,continuous,pre,right,5,3,3
+5,sha3,continuous,pre,left,3,3,3
+6,sha3,continuous,pre,left,4,3,3
+7,sha3,continuous,pre,left,5,3,3
+0,sha3,continuous,post,right,1,3,3
+1,sha3,continuous,post,right,2,3,3
+2,sha3,continuous,post,right,3,3,3
+3,sha3,continuous,post,right,4,3,3
+4,sha3,continuous,post,right,5,3,3
+5,sha3,continuous,post,left,3,3,3
+6,sha3,continuous,post,left,4,3,3
+7,sha3,continuous,post,left,5,3,3

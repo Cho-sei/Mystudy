@@ -31,39 +31,50 @@ else:
     handed = 'both'
 
 
-components.msg.setText('wait')
-components.msg.draw()
-win.flip()
+def PT():
+    instruction.inst_PT()
+    PT_result_post = performance_test(win, components, instruction, 'post', handed)
+    instruction.PresentText(text='Finish', sound='otsukaresama')
+    PT_df = pd.read_csv('result/' + pid + '_PT.csv', index_col=0)
+    PT_result_post.insert(0, 'condition', condition)
+    PT_result_post.insert(0, 'pid', pid)
+    pd.concat([PT_df, PT_result_post]).to_csv('result/' + pid + '_PT.csv')
 
-event.waitKeys(keyList=['space'])
+def KVIQ_test():
+    instruction.inst_KVIQ()
+    KVIQ_post_result = KVIQ.KVIQ_proc(win, handed, 'post')
+    instruction.PresentText(text='Finish', sound='otsukaresama')
+    KVIQ_df = pd.read_csv('result/' + pid + '_KVIQ.csv', index_col=0)
+    KVIQ_post_result.insert(0, 'condition', condition)
+    KVIQ_post_result.insert(0, 'pid', pid)
+    pd.concat([KVIQ_df, KVIQ_post_result]).to_csv('result/' + pid + '_KVIQ.csv')
 
-#performance test
-instruction.inst_PT()
-PT_result_post = performance_test(win, components, instruction, 'post', handed)
-instruction.PresentText(text='Finish', sound='otsukaresama')
-PT_df = pd.read_csv('result/' + pid + '_PT.csv', index_col=0)
-PT_result_post.insert(0, 'condition', condition)
-PT_result_post.insert(0, 'pid', pid)
-pd.concat([PT_df, PT_result_post]).to_csv('result/' + pid + '_PT.csv')
+def MR():
+    instruction.inst_MR()
+    MR_post_result = hand_lateralization_task(win, components, 'post')
+    instruction.PresentText(text='Finish', sound='otsukaresama')
+    MR_df = pd.read_csv('result/' + pid + '_MR.csv', index_col=0)
+    MR_post_result.insert(0, 'condition', condition)
+    MR_post_result.insert(0, 'pid', pid)
+    pd.concat([MR_df, MR_post_result]).to_csv('result/' + pid + '_MR.csv')
 
-event.waitKeys(keyList=['space'])
+def ex_finish():
+    instruction.inst_finish('Day3')
 
-#KVIQ
-instruction.PresentText(text=u'運動イメージ検査', sound='KVIQ_post')
-KVIQ_post_result = KVIQ.KVIQ_proc(win, handed, 'post')
-instruction.PresentText(text='Finish', sound='otsukaresama')
-KVIQ_df = pd.read_csv('result/' + pid + '_KVIQ.csv', index_col=0)
-KVIQ_post_result.insert(0, 'condition', condition)
-KVIQ_post_result.insert(0, 'pid', pid)
-pd.concat([KVIQ_df, KVIQ_post_result]).to_csv('result/' + pid + '_KVIQ.csv')
+if __name__ == '__main__':
 
-#MR task
-instruction.inst_MR()
-MR_post_result = hand_lateralization_task(win, components, 'post')
-instruction.PresentText(text='Finish', sound='otsukaresama')
-MR_df = pd.read_csv('result/' + pid + '_MR.csv', index_col=0)
-MR_post_result.insert(0, 'condition', condition)
-MR_post_result.insert(0, 'pid', pid)
-pd.concat([MR_df, MR_post_result]).to_csv('result/' + pid + '_MR.csv')
+    components.msg.setText('wait')
+    components.msg.draw()
+    win.flip()
 
-instruction.inst_finish('Day3')
+    event.waitKeys(keyList=['space'])
+
+    #PT()
+
+    #event.waitKeys(keyList=['space'])
+
+    KVIQ_test()
+    #MR()
+    #ex_finish()
+
+    event.waitKeys(keyList=['space'])

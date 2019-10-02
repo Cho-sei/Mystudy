@@ -23,58 +23,71 @@ instruction = instruction(win, components)
 
 #--experiment start------------------------------------------------------
 
-components.msg.setText('wait')
-components.msg.draw()
-win.flip()
+def intro():
+    instruction.introduction('Day1')
 
-event.waitKeys(keyList=['space'])
+def flandars_test():
+    instruction.inst_flandars()
+    handedDf = flandars.flandars_proc(win)
+    #handedDf = pd.read_csv('result/sha1_FlandarsTest.csv')
+    instruction.PresentText(text='Finish', sound='finish_flandars')
+    if handedDf['response'].sum() < -4:
+        handed = 'left'
+    elif handedDf['response'].sum() > 4:
+        handed = 'right'
+    else:
+        handed = 'both'
+    handedDf.insert(0, 'condition', condition)
+    handedDf.insert(0, 'pid', pid)
+    handedDf.to_csv('result/' + pid + '_FlandarsTest.csv')
+    win.setMouseVisible(False)
+    return handed
 
-instruction.introduction('Day1')
+def PT(handed):
+    instruction.inst_PT('pre')
+    PT_result = performance_test(win, components, instruction, 'pre', handed)
+    instruction.PresentText(text='Finish', sound='otsukaresama')
+    PT_result.insert(0, 'condition', condition)
+    PT_result.insert(0, 'pid', pid)
+    PT_result.to_csv('result/' + pid + '_PT.csv')
 
-#flandars handed test
-instruction.inst_flandars()
-handedDf = flandars.flandars_proc(win)
-#handedDf = pd.read_csv('result/sha1_FlandarsTest.csv')
-instruction.PresentText(text='Finish', sound='finish_flandars')
-if handedDf['response'].sum() < -4:
-    handed = 'left'
-elif handedDf['response'].sum() > 4:
-    handed = 'right'
-else:
-    handed = 'both'
-handedDf.insert(0, 'condition', condition)
-handedDf.insert(0, 'pid', pid)
-handedDf.to_csv('result/' + pid + '_FlandarsTest.csv')
-win.setMouseVisible(False)
+def KVIQ_test(handed):
+    instruction.inst_KVIQ('pre')
+    KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
+    instruction.PresentText(text='Finish', sound='otsukaresama')
+    KVIQ_pre_result.insert(0, 'condition', condition)
+    KVIQ_pre_result.insert(0, 'pid', pid)
+    KVIQ_pre_result.to_csv('result/' + pid + '_KVIQ.csv')
+    win.setMouseVisible(False)
 
-#performance test
-instruction.inst_PT('pre')
-PT_result = performance_test(win, components, instruction, 'pre', handed)
-instruction.PresentText(text='Finish', sound='otsukaresama')
-PT_result.insert(0, 'condition', condition)
-PT_result.insert(0, 'pid', pid)
-PT_result.to_csv('result/' + pid + '_PT.csv')
+def MR():
+    instruction.inst_MR('pre')
+    MR_pre_result = hand_lateralization_task(win, components, 'pre')
+    instruction.PresentText(text='Finish', sound='otsukaresama')
+    MR_pre_result.insert(0, 'condition', condition)
+    MR_pre_result.insert(0, 'pid', pid)
+    MR_pre_result.to_csv('result/' + pid + '_MR.csv')
 
-event.waitKeys(keyList=['space'])
+def rest():
+    instruction.PresentText(text=u'休憩', sound='into_rest')
+    event.waitKeys(keyList=['space'])
 
-#KVIQ
-instruction.inst_KVIQ('pre')
-KVIQ_pre_result = KVIQ.KVIQ_proc(win, handed, 'pre')
-instruction.PresentText(text='Finish', sound='otsukaresama')
-KVIQ_pre_result.insert(0, 'condition', condition)
-KVIQ_pre_result.insert(0, 'pid', pid)
-KVIQ_pre_result.to_csv('result/' + pid + '_KVIQ.csv')
-win.setMouseVisible(False)
+if __name__ == '__main__':
 
-#MR task
-instruction.inst_MR('pre')
-MR_pre_result = hand_lateralization_task(win, components, 'pre')
-instruction.PresentText(text='Finish', sound='otsukaresama')
-MR_pre_result.insert(0, 'condition', condition)
-MR_pre_result.insert(0, 'pid', pid)
-MR_pre_result.to_csv('result/' + pid + '_MR.csv')
+    components.msg.setText('wait')
+    components.msg.draw()
+    win.flip()
 
-#rest
-instruction.PresentText(text=u'休憩', sound='into_rest')
-event.waitKeys(keyList=['space'])
+    event.waitKeys(keyList=['space'])
 
+    intro()
+    handed = flandars_test()
+    PT(handed)
+
+    event.waitKeys(keyList=['space'])
+    
+    KVIQ_test(handed)
+    MR()
+    rest()
+
+    event.waitKeys(keyList=['space'])

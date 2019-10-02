@@ -76,18 +76,21 @@ def control_task(win, components, pid, day):
 			t_duration = clock.getTime() - t_start
 
 			j = 0
+			pre_time = 0
 			waiting_key = True
 			while waiting_key:	
 				components.Circle.setRadius(5*dummy[blocks][i][j] + 300)
 				components.Circle.draw()
 				components.fixation.draw()
-				core.wait(0.1)
 				win.flip()
+
+				if t_duration%0.1 < 0.02:
+					if (t_duration - pre_time) > 0.05:
+						j += 1
+						pre_time = t_duration
 
 				if j == len(dummy[blocks][i])-1:
 					j = 0
-				else:
-					j += 1
 				
 				t_duration = clock.getTime() - t_start
 				if 'return' in event.getKeys(keyList=['return']):

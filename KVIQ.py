@@ -3,7 +3,7 @@ import pandas as pd
 
 soundnameList = ['MItest_pre','MItest_1','MItest_2','MItest_3_right','MItest_3_left',
             'MItest_4_right','MItest_4_left','MItest_5_right','MItest_5_left',
-            'MItest_imagery', 'question_visual', 'question_kinesthetic', 'PT_start']
+            'MItest_imagery', 'MItest_release', 'question_visual', 'question_kinesthetic', 'PT_start']
 soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
 def display_ratingscale(win, choices, inst):
@@ -54,7 +54,7 @@ def play_sound(win, sound_list, wait_time, images=[]):
                     arrow.setPos((arrow_pos, -100))
                     arrow.draw()
             win.flip()
-        elif i == 2:
+        elif (i == 2) | (i == 3):
             text.setText(u'実際に運動')
             text.draw()
             win.flip()
@@ -110,10 +110,11 @@ def KVIQ_proc(win, handed, timing):
             sound_list = ['MItest_pre']
             sound_list.append('MItest_'+str(j+1)) if j < 2 else sound_list.append('MItest_'+str(j+1)+'_'+hand)
             sound_list.append('PT_start')
+            sound_list.append('MItest_release')
             sound_list.append('MItest_imagery')
             sound_list.append('PT_start')
 
-            play_sound(win, sound_list, [1, 1, 5, 1, 5], [imageDict[img] for img in image])
+            play_sound(win, sound_list, [2, 2, 5, 1, 1, 5], [imageDict[img] for img in image])
             MItext.setAutoDraw(False)
 
             response = display_ratingscale(win, choices, inst)

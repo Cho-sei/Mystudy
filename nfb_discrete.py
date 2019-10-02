@@ -46,18 +46,21 @@ class discrete_DataAquisition(BetaInlet):
 			components.fixation.draw()
 			win.flip()
 
-			#if 'return' in event.getKeys(keyList=['return']):
-				
-			core.wait(1)
-			"""
-			if t_duration%(components.task_duration/len(dummy)) < 0.02:
+			if t_duration%0.1 < 0.02:
 				if (t_duration - pre_time) > 0.05:
 					i += 1
 					pre_time = t_duration
-			"""
+			
+			if i == len(dummy)-1:
+				i = 0
+			
+			if 'return' in event.getKeys(keyList=['return']):
+				RT = t_duration
+				waiting_key = False
+			
 		detrend_buffer = detrend(data_buffer)
 		
-		return detrend_buffer
+		return detrend_buffer, RT
 	
 
 def discrete_task(win, components, baseline, fmin, fmax, pid, day):
@@ -91,6 +94,7 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 		components.df['block'] = blocks
 		ERD_list = []
 		steps_list = []
+		RT_list = []
 
 		for i, row in components.df.iterrows():
 					
@@ -110,7 +114,7 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 				components.fixation.draw()
 				win.flip()
 
-				task_data = discrete_betaIn.DataAquisition4discrete(components.channels['C4'], win, components, dummy[blocks][i])
+				task_data, RT = discrete_betaIn.DataAquisition4discrete(components.channels['C4'], win, components, dummy[blocks][i])
 				base = baseline[0]
 
 			else:
@@ -129,9 +133,11 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 				components.fixation.draw()
 				win.flip()
 
-				task_data = discrete_betaIn.DataAquisition4discrete(components.channels['C3'], win, components, dummy[blocks][i])
+				task_data, RT = discrete_betaIn.DataAquisition4discrete(components.channels['C3'], win, components, dummy[blocks][i])
 				base = baseline[1]
 			
+			RT_list.append(RT)
+
 			min_erd = float('inf')
 			for steps in range(0, len(task_data)-500, 125):
 				task_psd, _ = psd_array_multitaper(task_data[steps:steps+int(discrete_betaIn.sampling_rate())], discrete_betaIn.sampling_rate(), fmin=fmin, fmax=fmax)
@@ -162,6 +168,7 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 
 		components.df['ERD'] = ERD_list
 		components.df['steps'] = steps_list
+		components.df['RT'] = RT_list
 		if blocks == 0:
 			components.df.to_csv(condition_fname, mode='a')
 		else:

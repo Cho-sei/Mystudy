@@ -36,7 +36,7 @@ class instruction():
             self.win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], pos=(0.0, -200),
             scale=False, showValue=False, acceptPreText='Enter', acceptText='Enter',
             markerStart=0, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return',
-            marker=visual.TextStim(win, text=u'「1」 ⇦ ▼ ⇨ 「3」\n\n', units='norm'), noMouse=True)
+            marker=visual.TextStim(self.win, text=u'「1」 ⇦ ▼ ⇨ 「3」\n\n', units='norm'), noMouse=True)
         ratingScale.draw()
         self.PresentText(text=u'利き手判別テスト', sound='into_flandars')
         self.PresentText(text='Ready', sound='start')

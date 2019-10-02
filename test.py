@@ -1,8 +1,11 @@
-#from psychopy import core, visual, event, sound
-#from experiment_parameter import MIexperiment_components
+from psychopy import core, visual, event, sound
+from experiment_parameter import MIexperiment_components
 
-def test(*x):
-	for item in x:
-		print(item)
+win, win0 = visual.Window(units='pix', fullscr=True, allowGUI=False)
+components = MIexperiment_components(win)
 
-test(1,2,3,4,5,6)
+win.set
+
+core.wait(1)
+
+
