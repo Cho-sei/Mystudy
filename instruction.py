@@ -13,8 +13,8 @@ class instruction():
         soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-        imgnameList = ['proc_day1', 'proc_day2', 'proc_day3', 'back_right_0']
-        self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.png')] for imgname in imgnameList])
+        imgnameList = ['day_flow/スライド1', 'day_flow/スライド2', 'day_flow/スライド3', 'day_flow/スライド4', 'back_right_0']
+        self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.PNG')] for imgname in imgnameList])
         
         self.dummy = [-6.852039504, 3.711962456, -16.51470402, -23.43944568, -23.96121308, -28.59563485, -34.98797214, -31.84493135, 
                       -30.36166352, 2.555086205, 14.56816966, -10.57715854, -10.24612483, 14.17700023, 40.76523032, 42.90205179, 
@@ -25,11 +25,11 @@ class instruction():
     def introduction(self, day):
         if day == 'Day1':
             self.PresentText(text=u'実験開始', sound='ex_start')
-            self.PresentImg(img='proc_day1', sound='ex_flow_into_day1')
+            self.PresentImg(img='day_flow/スライド1', sound='ex_flow_into_day1')
         elif day == 'Day2':
-            self.PresentImg(img='proc_day2', sound='ex_flow_into_day2')
+            self.PresentImg(img='day_flow/スライド2', sound='ex_flow_into_day2')
         else:
-            self.PresentImg(img='proc_day3', sound='ex_flow_into_day3')
+            self.PresentImg(img='day_flow/スライド3', sound='ex_flow_into_day3')
         
     def inst_flandars(self):
         ratingScale = visual.RatingScale(
@@ -79,6 +79,9 @@ class instruction():
         self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_PT')
         self.PresentText(text='Ready', sound='start')
     
+    def inst_train_proc(self):
+        self.PresentImg(img='day_flow/スライド4', sound='inst_training_proc')
+    
     def inst_MItest(self, timing=None):
         if timing == 'pre':
             self.PresentText(text=u'運動イメージ課題', sound='into_inst_MItest')            
@@ -112,7 +115,7 @@ class instruction():
                 self.viz_circle(self.soundDict['FB_NFB'].getDuration() + 1)
             self.PresentText(text='', sound='confirmation')
         else:
-            self.PresentText(text=u'運動イメージ\nトレーニング' sound='into_training')
+            self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_training')
             self.PresentText(text='Ready', sound='start')
     
     def inst_finish(self, day):
@@ -163,4 +166,5 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
-    instruction.inst_flandars()
+    instruction.inst_train_proc()
+    instruction.inst_MItest('pre')

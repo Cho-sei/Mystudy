@@ -37,6 +37,7 @@ trigger.SendTrigger('start')
 #MItest
 if day == 'Day1':
 	#inst_MI
+	instruction.inst_train_proc()
 	instruction.inst_MItest('pre')
 else:
 	instruction.introduction(day)

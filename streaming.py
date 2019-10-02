@@ -39,4 +39,4 @@ class BetaInlet(object):
 		detrend_buffer = detrend(data_buffer)
 		psd, freqs = psd_array_multitaper(detrend_buffer, self.sampling_rate(), fmin=fmin, fmax=fmax)
 
-		return np.average(psd)
+		return None if any(detrend_buffer > 50) else np.average(psd)

@@ -105,7 +105,7 @@ def KVIQ_proc(win, handed, timing):
             sound_list.append('MItest_imagery')
             sound_list.append('PT_start')
 
-            #play_sound(win, sound_list, [1, 1, 5, 1, 5], [imageDict[img] for img in image])
+            play_sound(win, sound_list, [1, 1, 5, 1, 5], [imageDict[img] for img in image])
             MItext.setAutoDraw(False)
 
             response = display_ratingscale(win, choices, inst)
