@@ -33,26 +33,34 @@ def play_sound(win, sound_list, wait_time, images=[]):
     arrow = visual.ShapeStim(
         win, vertices=((-30, 10), (0, 10), (0, 25), (30, 0), (0, -25), (0, -10), (-30, -10)),
         fillColor='white', lineColor='white')
+    text = visual.TextStim(win, height=80)
     for i, (soundname, time) in enumerate(zip(sound_list, wait_time)):
         if i == 0:
             if len(images) == 2:
-                images[0].setPos((-300, 0))
+                images[0].setPos((-400, -100))
                 images[0].draw()
                 win.flip()
         elif i == 1:
             if len(images) == 2:
-                for i, x_pos in enumerate([-300, 300]):
-                    images[i].setPos((x_pos, 0))
+                for i, x_pos in enumerate([-400, 400]):
+                    images[i].setPos((x_pos, -100))
                     images[i].draw()
+                    arrow.setPos((0, -100))
                     arrow.draw()
             elif len(images) == 4:
-                for i, (x_pos, arrow_pos) in enumerate(zip([-450, -150, 150, 450], [-300, 0, 300, 0])):
-                    images[i].setPos((x_pos, 0))
+                for i, (x_pos, arrow_pos) in enumerate(zip([-600, -200, 200, 600], [-400, 0, 400, 0])):
+                    images[i].setPos((x_pos, -100))
                     images[i].draw()
-                    arrow.setPos((arrow_pos, 0))
+                    arrow.setPos((arrow_pos, -100))
                     arrow.draw()
             win.flip()
         elif i == 2:
+            text.setText(u'実際に運動')
+            text.draw()
+            win.flip()
+        else:
+            text.setText(u'イメージ')
+            text.draw()
             win.flip()
 
         soundDict[soundname].play()
@@ -74,7 +82,7 @@ def KVIQ_proc(win, handed, timing):
     imagenameList = ['base-left', 'base-right', '1-left', '1-right', '2-left', '2-right', '3-left', '3-right', '4-left', '4-right',
                      'index-finger-left', 'index-finger-right', 'middle-finger-left', 'middle-finger-right', 'ring-finger-left',
                      'ring-finger-right', 'little-finger-left', 'little-finger-right']
-    imageDict = dict([[imagename, visual.ImageStim(win, 'InstImage/' + imagename + '.jpg', size=(200, 411.4))] for imagename in imagenameList])
+    imageDict = dict([[imagename, visual.ImageStim(win, 'InstImage/' + imagename + '.jpg', size=(300, 617.1))] for imagename in imagenameList])
 
     summary = pd.DataFrame(columns=['hand', 'part', 'VR', 'KR'])
 

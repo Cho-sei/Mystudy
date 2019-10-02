@@ -11,8 +11,7 @@ from trigger import trigger
 def baseline(win, components, instruction, fmin, fmax, pid, day):
     betaIn = BetaInlet()
 
-    noisy = True
-    while noisy:
+    while True:
         components.msg.setText('Start')
         components.msg.draw()
         win.flip()
@@ -23,26 +22,24 @@ def baseline(win, components, instruction, fmin, fmax, pid, day):
         components.fixation.draw()
         win.flip()
 
-        baselineLeft = []
-        baselineRight = []
+        baseline = pd.DataFrame(columns=['C4', 'C3'])
    
         for i in range(components.baseline_duration):
-            baselineLeft.append(betaIn.DataAquisition(electrode=17, duration=1, fmin=fmin, fmax=fmax))
-            baselineRight.append(betaIn.DataAquisition(electrode=7, duration=1, fmin=fmin, fmax=fmax))
+            baseline = baseline.append(pd.Series(betaIn.DataAquisition(electrode=baseline.columns, duration=1, fmin=fmin, fmax=fmax), index=baseline.columns), ignore_index=True)
 
-        basedf = pd.DataFrame({'Left':baselineLeft, 'right':baselineRight})
-        art_prob = basedf.count() / len(basedf)
-        if all(art_prob > 0.7):
-            noisy = False
-            instruction.PresentText(text=u'安静時脳波の測定', sound='repeat_resting')
+        art_prob = baseline.count() / len(baseline)
+        print(art_prob)
+        if all(art_prob > 0.5):
+            break
+        instruction.PresentText(text=u'安静時脳波の測定', sound='repeat_resting')
 
     components.msg.setText('Finish')
     components.msg.draw()
     win.flip()
 
-    basedf.to_csv('result/' + pid + '_baseline_' + day + '.csv')
+    baseline.to_csv('result/' + pid + '_baseline_' + day + '.csv')
 
-    return basedf.mean()
+    return baseline.mean()
 
 if __name__ == '__main__':
     event.globalKeys.add(key='escape', func=core.quit)

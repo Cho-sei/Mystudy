@@ -51,7 +51,7 @@ instruction.PresentText(text='Finish', sound='otsukaresama')
 MI_result.insert(0, 'day', day)
 MI_result.insert(0, 'condition', condition)
 MI_result.insert(0, 'pid', pid)
-MI_result.to_csv('result/' + pid + '_MItask.csv')
+MI_result.to_csv('result/' + pid + '_MItask' + day + '.csv')
 
 #inst_training
 if day == 'Day1':
@@ -59,7 +59,7 @@ if day == 'Day1':
 
 #recording baseline
 instruction.inst_resting()
-baseline = record_baseline.baseline(win, components, fmin=8, fmax=13, pid=pid, day=day)
+baseline = record_baseline.baseline(win, components, instruction, fmin=8, fmax=13, pid=pid, day=day)
 #baseline = [500, 500]
 instruction.PresentText(text='Finish', sound='otsukaresama')
 
