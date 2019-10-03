@@ -84,7 +84,6 @@ if __name__ == '__main__':
 	MItask('pre')
 	inst_train()
 	baseline = record_resting()
-	#baseline = [500, 500]
 	training(baseline)
 	MItask('post')
 	finish()
