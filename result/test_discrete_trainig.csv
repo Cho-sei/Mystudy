@@ -1,0 +1,7 @@
+,pid,condition,day,block,hand,ERD,steps,RT
+0,test,continuous,Day1,0,left,452.943849652771,1125,5.836828892159248
+1,test,continuous,Day1,0,right,60786.5020427179,1000,4.1198362397663
+0,test,continuous,Day2,0,right,85335.27944258433,250,2.9495573126350783
+1,test,continuous,Day2,0,left,621.2073847607396,125,1.4347173075166209
+0,test,discrete,Day3,0,right,inf,0,0.7703882487330702
+1,test,discrete,Day3,0,left,inf,0,0.24954206736583728

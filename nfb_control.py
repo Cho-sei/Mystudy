@@ -11,9 +11,7 @@ from trigger import trigger
 from experiment_parameter import MIexperiment_components
 
 def control_task(win, components, pid, day):
-	condition_fname = 'result/' + pid + '_control_condition_' + day + '.csv'
-	if os.path.exists(condition_fname):
-		os.remove(condition_fname)
+	condition_fname = 'result/' + pid + '_control_training.csv'
 
 	#define dummy
 	if day == 'Day1':
@@ -30,11 +28,11 @@ def control_task(win, components, pid, day):
 
 	core.wait(components.ready_duration)
 
+	RT = []
 	for blocks in range(components.blockNum):
 
 		components.df['block'] = blocks
 
-		RT = []
 		for i, row in components.df.iterrows():
 
 			if row['hand'] == 'left':
@@ -100,13 +98,17 @@ def control_task(win, components, pid, day):
 			win.flip()
 			core.wait(components.FB_duration + random.choice(components.wait_time_list))
 
-		components.df['RT'] = RT
-		if blocks == 0:
-			components.df.to_csv(condition_fname, mode='a')
-		else:
-			components.df.to_csv(condition_fname, mode='a', header=False)
-
 		components.rest(win, blocks+2)
+
+	components.df['RT'] = RT
+	components.df.insert(0, 'day', day)
+	components.df.insert(0, 'condition', 'control')
+	components.df.insert(0, 'pid', pid)
+	if day == 'Day1':
+		components.df.to_csv(condition_fname)
+	else:
+		train_df = pd.read_csv(condition_fname, index_col=0)
+		pd.concat([train_df, components.df]).to_csv(condition_fname)
 
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')

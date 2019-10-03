@@ -67,13 +67,11 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 	discrete_betaIn = discrete_DataAquisition()
 
 	eeg_fname = 'result/' + pid + '_discrete_eeg_' + day + '.csv'
-	condition_fname = 'result/' + pid + '_discrete_condition_' + day + '.csv'
+	condition_fname = 'result/' + pid + '_discrete_trainig.csv'
 
 	if os.path.exists(eeg_fname):
 		os.remove(eeg_fname)
-	if os.path.exists(condition_fname):
-		os.remove(condition_fname)
-
+	
 	#define dummy
 	if day == 'Day1':
 		dummy = components.dummyList[0]
@@ -89,12 +87,12 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 
 	core.wait(components.ready_duration)
 
+	RT_list = []
+	ERD_list = []
+	steps_list = []
 	for blocks in range(components.blockNum):
 
 		components.df['block'] = blocks
-		ERD_list = []
-		steps_list = []
-		RT_list = []
 
 		for i, row in components.df.iterrows():
 					
@@ -139,16 +137,17 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 			RT_list.append(RT)
 
 			min_erd = float('inf')
+			final_step = 0
 			for steps in range(0, len(task_data)-500, 125):
 				task_psd, _ = psd_array_multitaper(task_data[steps:steps+int(discrete_betaIn.sampling_rate())], discrete_betaIn.sampling_rate(), fmin=fmin, fmax=fmax)
-				if min_erd > np.average(task_psd):
-					min_erd = np.average(task_psd)
+				ERD = 100 * (np.average(task_psd) - base) / base
+				if min_erd > ERD:
+					min_erd = ERD
 					final_step = steps
 			steps_list.append(final_step)
-			
-			ERD = 100 * (min_erd - base) / base
-			ERD_list.append(ERD)
-			if ERD < -10:
+
+			ERD_list.append(min_erd)
+			if min_erd < -10:
 				components.msg.setText('GOOD!')
 			else:
 				components.msg.setText('BAD...')
@@ -166,15 +165,19 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 			
 			core.wait(random.choice(components.wait_time_list))
 
-		components.df['ERD'] = ERD_list
-		components.df['steps'] = steps_list
-		components.df['RT'] = RT_list
-		if blocks == 0:
-			components.df.to_csv(condition_fname, mode='a')
-		else:
-			components.df.to_csv(condition_fname, mode='a', header=False)
-
 		components.rest(win, blocks+2)
+
+	components.df['ERD'] = ERD_list
+	components.df['steps'] = steps_list
+	components.df['RT'] = RT_list
+	components.df.insert(0, 'day', day)
+	components.df.insert(0, 'condition', 'discrete')
+	components.df.insert(0, 'pid', pid)
+	if day == 'Day1':
+		components.df.to_csv(condition_fname)
+	else:
+		train_df = pd.read_csv(condition_fname, index_col=0)
+		pd.concat([train_df, components.df]).to_csv(condition_fname)
 
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')

@@ -23,10 +23,7 @@ from experiment_parameter import MIexperiment_components
 
 def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 
-	condition_fname = 'result/' + pid + '_continuous_condition_' + day + '.csv'
-
-	if os.path.exists(condition_fname):
-		os.remove(condition_fname)
+	condition_fname = 'result/' + pid + '__continuous_training.csv'
 	
 	betaIn = BetaInlet()
 
@@ -48,9 +45,9 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 
 	clock = core.Clock()
 
+	RT = []
 	for blocks in range(components.blockNum):
 		components.df['block'] = blocks
-		RT = []
 
 		eeg_fname = 'result/' + pid + '_continuous_eeg_' + day + '_b' + str(blocks) + '.csv'
 		ERSP_fname = 'result/' + pid + '_FB_ERSP_' + day + '_b' + str(blocks) + '.csv'
@@ -146,13 +143,17 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				writer = csv.writer(f, lineterminator='\n')
 				writer.writerow('\n')
 
-		components.df['RT'] = RT
-		if blocks == 0:
-			components.df.to_csv(condition_fname, mode='a')
-		else:
-			components.df.to_csv(condition_fname, mode='a', header=False)
-		
 		components.rest(win, blocks+2)
+
+	components.df['RT'] = RT
+	components.df.insert(0, 'day', day)
+	components.df.insert(0, 'condition', 'continuous')
+	components.df.insert(0, 'pid', pid)
+	if day == 'Day1':
+		components.df.to_csv(condition_fname)
+	else:
+		train_df = pd.read_csv(condition_fname, index_col=0)
+		pd.concat([train_df, components.df]).to_csv(condition_fname)
 		
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')
@@ -167,4 +168,4 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
 	components = MIexperiment_components(win)
 
-	continuous_task(win, components, baseline(win, components, fmin=8, fmax=13, pid=sys.argv[1], day=sys.argv[2]), fmin=8, fmax=13, pid=sys.argv[1], day=sys.argv[2])
+	continuous_task(win, components, [500, 500], fmin=8, fmax=13, pid=sys.argv[1], day=sys.argv[2])

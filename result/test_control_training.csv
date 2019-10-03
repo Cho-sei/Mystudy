@@ -1,0 +1,7 @@
+,pid,condition,day,block,hand,RT
+0,test,control,Day1,0,left,0.3665816813154379
+1,test,control,Day1,0,right,0.3003884862218911
+0,test,control,Day2,0,left,0.23224290079906496
+1,test,control,Day2,0,right,0.33595094853990304
+0,test,control,Day3,0,right,0.39932951461105404
+1,test,control,Day3,0,left,0.3004149164617047
