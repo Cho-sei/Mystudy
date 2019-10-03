@@ -30,9 +30,8 @@ class BetaInlet(object):
 	def sampling_rate(self):
 		return self.inlet.info().nominal_srate()
 
-	def DataAquisition(self, electrode, duration, fmin, fmax):
+	def DataAquisition(self, electrode, duration):
 		data = pd.DataFrame(columns=electrode)
-		psdList = []
 		self.update()
 
 		t_start = time.perf_counter()
@@ -47,10 +46,6 @@ class BetaInlet(object):
 			t_duration = time.perf_counter() - t_start
 
 		for ch in data:
-			detrend_buffer = detrend(data[ch])
-			if any(detrend_buffer > 50):
-				psdList.append(None)
-			else:
-				psdList.append(np.average(psd_array_multitaper(detrend_buffer, self.sampling_rate(), fmin=fmin, fmax=fmax)[0]))
+			data[ch] = detrend(data[ch])
 
-		return psdList
+		return data

@@ -19,16 +19,17 @@ class MIexperiment_components(object):
 
         #parameter
         self.N = 512
-        self.blockNum = 1
+        self.blockNum = 2
         self.ready_duration = 1         
         self.relax_duration = 1         
-        self.rest_duration = 1         
+        self.rest_duration = 1        
         self.trialNum = 1
-        self.baseline_duration = 1
+        self.baseline_duration = 5
         self.MItask_trial = 5
         self.MRtrial = 3
         self.PTtrial = 3
-        self.FB_duration = 1.5
+        self.FB_duration = 0.5
+        self.artifact_th = 100
         self.wait_time_list = [.6, .7, .8, .9, 1]
 
         #DataFrame
@@ -67,7 +68,7 @@ class MIexperiment_components(object):
         trigger.SendTrigger('rest')
 
         for time in reversed(range(1, self.rest_duration+1)):
-            if blocknum < 6:
+            if blocknum <= self.blockNum:
                 self.msg.setText('Rest\n次は、第' + str(blocknum) + 'ブロックです')
             else:
                 self.msg.setText('Rest\n次は、運動イメージ課題です')

@@ -7,11 +7,18 @@ import pandas as pd
 from instruction import instruction
 from experiment_parameter import MIexperiment_components
 from trigger import trigger
+from scipy.signal import detrend
+from mne.time_frequency.multitaper import psd_array_multitaper
 
 def baseline(win, components, instruction, fmin, fmax, pid, day):
     betaIn = BetaInlet()
 
+    baseline = pd.DataFrame(columns=['counter', 'C4', 'C3'])
+    counter = 0
+
     while True:
+        counter += 1
+
         components.msg.setText('Start')
         components.msg.draw()
         win.flip()
@@ -21,14 +28,17 @@ def baseline(win, components, instruction, fmin, fmax, pid, day):
         trigger.SendTrigger('baseline')    
         components.fixation.draw()
         win.flip()
-
-        baseline = pd.DataFrame(columns=['C4', 'C3'])
    
         for i in range(components.baseline_duration):
-            baseline = baseline.append(pd.Series(betaIn.DataAquisition(electrode=baseline.columns, duration=1, fmin=fmin, fmax=fmax), index=baseline.columns), ignore_index=True)
-
-        art_prob = baseline.count() / len(baseline)
-        print(art_prob)
+            data = betaIn.DataAquisition(electrode=['Fp1', 'C4', 'C3'], duration=1)
+            
+            if any(data['Fp1'] > components.artifact_th):
+                psdList = [None] * 2
+            else:
+                psdList = [np.average(psd_array_multitaper(data[ch], betaIn.sampling_rate(), fmin=fmin, fmax=fmax)[0]) for ch in ['C4', 'C3']]
+            baseline = baseline.append(pd.Series([counter]+psdList, index=baseline.columns), ignore_index=True)
+        baseline.to_csv('result/baseline.csv')
+        art_prob = baseline[baseline.counter == counter].count() / len(baseline[baseline.counter == counter])
         if all(art_prob > 0.5):
             break
         instruction.PresentText(text=u'安静時脳波の測定', sound='repeat_resting')

@@ -8,10 +8,16 @@ import sys
 import os
 import random
 from trigger import trigger
+from fatigue import fatigue_VAS
 from experiment_parameter import MIexperiment_components
 
 def control_task(win, components, pid, day):
 	condition_fname = 'result/' + pid + '_control_training.csv'
+	fatigue_fname = 'result/' + pid + '_fatigue.csv'
+
+	summary = pd.DataFrame()
+
+	fatigue_res = []
 
 	#define dummy
 	if day == 'Day1':
@@ -28,11 +34,11 @@ def control_task(win, components, pid, day):
 
 	core.wait(components.ready_duration)
 
-	RT = []
 	for blocks in range(components.blockNum):
 
 		components.df['block'] = blocks
 
+		RT = []
 		for i, row in components.df.iterrows():
 
 			if row['hand'] == 'left':
@@ -98,17 +104,36 @@ def control_task(win, components, pid, day):
 			win.flip()
 			core.wait(components.FB_duration + random.choice(components.wait_time_list))
 
+		fatigue_res.append(fatigue_VAS(win, components))
 		components.rest(win, blocks+2)
 
-	components.df['RT'] = RT
-	components.df.insert(0, 'day', day)
-	components.df.insert(0, 'condition', 'control')
-	components.df.insert(0, 'pid', pid)
+		components.df['RT'] = RT
+		summary = pd.concat([summary, components.df])
+
+	fatigue_df = pd.DataFrame({'fatigue':fatigue_res})
+	fatigue_df.insert(0, 'block', range(components.blockNum))
+	fatigue_df.insert(0, 'day', day)
+	fatigue_df.insert(0, 'condition', 'control')
+	fatigue_df.insert(0, 'pid', pid)
+
+	summary.insert(0, 'day', day)
+	summary.insert(0, 'condition', 'control')
+	summary.insert(0, 'pid', pid)
 	if day == 'Day1':
-		components.df.to_csv(condition_fname)
+		summary.to_csv(condition_fname)
+		fatigue_df.to_csv(fatigue_fname)
 	else:
-		train_df = pd.read_csv(condition_fname, index_col=0)
-		pd.concat([train_df, components.df]).to_csv(condition_fname)
+		if os.path.exists(fatigue_fname):
+			fat_df = pd.read_csv(fatigue_fname, index_col=0)
+			pd.concat([fat_df, fatigue_df]).to_csv(fatigue_fname)
+		else:
+			fatigue_df.to_csv(fatigue_fname)
+		if os.path.exists(condition_fname):
+			train_df = pd.read_csv(condition_fname, index_col=0)
+			pd.concat([train_df, summary]).to_csv(condition_fname)
+		else:
+			summary.to_csv(condition_fname)
+
 
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')

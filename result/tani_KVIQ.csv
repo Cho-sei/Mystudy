@@ -7,3 +7,11 @@
 5,tani,continuous,pre,left,3,5,4
 6,tani,continuous,pre,left,4,5,5
 7,tani,continuous,pre,left,5,5,5
+0,tani,continuous,post,right,1,4,4
+1,tani,continuous,post,right,2,5,4
+2,tani,continuous,post,right,3,4,5
+3,tani,continuous,post,right,4,3,4
+4,tani,continuous,post,right,5,5,5
+5,tani,continuous,post,left,3,5,4
+6,tani,continuous,post,left,4,5,3
+7,tani,continuous,post,left,5,4,4

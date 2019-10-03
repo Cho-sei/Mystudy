@@ -17,6 +17,7 @@ import sys
 import winsound
 import random
 from streaming import BetaInlet
+from fatigue import fatigue_VAS
 from record_baseline import baseline
 from trigger import trigger
 from experiment_parameter import MIexperiment_components
@@ -68,9 +69,13 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 
 	eeg_fname = 'result/' + pid + '_discrete_eeg_' + day + '.csv'
 	condition_fname = 'result/' + pid + '_discrete_trainig.csv'
+	fatigue_fname = 'result/' + pid + '_fatigue.csv'
 
 	if os.path.exists(eeg_fname):
 		os.remove(eeg_fname)
+
+	summary = pd.DataFrame()
+	fatigue_res = []
 	
 	#define dummy
 	if day == 'Day1':
@@ -87,12 +92,13 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 
 	core.wait(components.ready_duration)
 
-	RT_list = []
-	ERD_list = []
-	steps_list = []
 	for blocks in range(components.blockNum):
 
 		components.df['block'] = blocks
+
+		RT_list = []
+		ERD_list = []
+		steps_list = []
 
 		for i, row in components.df.iterrows():
 					
@@ -165,19 +171,37 @@ def discrete_task(win, components, baseline, fmin, fmax, pid, day):
 			
 			core.wait(random.choice(components.wait_time_list))
 
+		fatigue_res.append(fatigue_VAS(win, components))
 		components.rest(win, blocks+2)
 
-	components.df['ERD'] = ERD_list
-	components.df['steps'] = steps_list
-	components.df['RT'] = RT_list
-	components.df.insert(0, 'day', day)
-	components.df.insert(0, 'condition', 'discrete')
-	components.df.insert(0, 'pid', pid)
+		components.df['ERD'] = ERD_list
+		components.df['steps'] = steps_list
+		components.df['RT'] = RT_list
+		summary = pd.concat([summary, components.df])
+
+	fatigue_df = pd.DataFrame({'fatigue':fatigue_res})
+	fatigue_df.insert(0, 'block', range(components.blockNum))
+	fatigue_df.insert(0, 'day', day)
+	fatigue_df.insert(0, 'condition', 'discrete')
+	fatigue_df.insert(0, 'pid', pid)
+
+	summary.insert(0, 'day', day)
+	summary.insert(0, 'condition', 'discrete')
+	summary.insert(0, 'pid', pid)
 	if day == 'Day1':
-		components.df.to_csv(condition_fname)
+		summary.to_csv(condition_fname)
+		fatigue_df.to_csv(fatigue_fname)
 	else:
-		train_df = pd.read_csv(condition_fname, index_col=0)
-		pd.concat([train_df, components.df]).to_csv(condition_fname)
+		if os.path.exists(fatigue_fname):
+			fat_df = pd.read_csv(fatigue_fname, index_col=0)
+			pd.concat([fat_df, fatigue_df]).to_csv(fatigue_fname)
+		else:
+			fatigue_df.to_csv(fatigue_fname)
+		if os.path.exists(condition_fname):
+			train_df = pd.read_csv(condition_fname, index_col=0)
+			pd.concat([train_df, summary]).to_csv(condition_fname)
+		else:
+			summary.to_csv(condition_fname)
 
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')

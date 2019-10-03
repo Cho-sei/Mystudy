@@ -1,3 +1,9 @@
 ,pid,condition,timing,trial,hand,PTime
-0,tani,continuous,pre,0,right,18.155197219386537
-1,tani,continuous,pre,0,left,14.263131041130691
+0,tani,continuous,pre,0,right,18.155197219386533
+1,tani,continuous,pre,0,left,14.263131041130693
+0,tani,continuous,post,0,right,9.639114992995019
+1,tani,continuous,post,0,left,10.148304672482482
+2,tani,continuous,post,1,right,9.86556813907373
+3,tani,continuous,post,1,left,10.517463876756665
+4,tani,continuous,post,2,right,9.138842646607372
+5,tani,continuous,post,2,left,10.011374579316907

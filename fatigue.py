@@ -6,23 +6,40 @@ from instruction import instruction
 
 inst_fatigue = sound.Sound('voicedata/inst_fatigue.wav')
 
-def fatigue_VAS(win, components, instruction, pid, day, block):
+def fatigue_VAS(win, components):
+    components.msg.setText(u'現在の疲労度を\nお答えください。')
+    inst_fatigue.play()
     ratingScale = visual.RatingScale(
-        win, high=10, precision=100, size=2.0, labels=False, pos=(0.0, -100), scale=False,
-        showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5,
-        markerStart=50, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return', noMouse=True)
+        win, low=0, high=10, size=2.0, pos=(0.0, -200), scale=False, labels=False,
+        showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5, tickMarks=[0, 10],
+        markerStart=5, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return', noMouse=True)
     while ratingScale.noResponse:
+        components.msg.setText(u'現在の疲労度を\nお答えください。')
+        components.msg.setPos((0, 100))
+        components.msg.setHeight(60)
+        components.msg.draw()
+        components.msg.setText(u'疲れを全く\n感じない状態')
+        components.msg.setPos((-750, -200))
+        components.msg.setHeight(30)
+        components.msg.draw()
+        components.msg.setText(u'何もできないほど\n疲れ切っている状態')
+        components.msg.setPos((750, -200))
+        components.msg.setHeight(30)
+        components.msg.draw()
         ratingScale.draw()
         win.flip()
-    response = ratingScale.getRating()
-    return response
+    inst_fatigue.stop()
+
+    components.msg.setPos((0, 0))
+    components.msg.setHeight(80)
+    
+    return ratingScale.getRating()
 
 if __name__ == '__main__':
     event.globalKeys.add(key='escape', func=core.quit)
 
     win = visual.Window(units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
-    instruction = instruction(win, components)
 
-    print(fatigue_VAS(win, components, instruction, 'test', 'test', 'test'))
+    print(fatigue_VAS(win, components))
 	

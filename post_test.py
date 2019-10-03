@@ -69,12 +69,12 @@ if __name__ == '__main__':
 
     event.waitKeys(keyList=['space'])
 
-    #PT()
+    PT()
 
-    #event.waitKeys(keyList=['space'])
+    event.waitKeys(keyList=['space'])
 
     KVIQ_test()
-    #MR()
-    #ex_finish()
+    MR()
+    ex_finish()
 
     event.waitKeys(keyList=['space'])

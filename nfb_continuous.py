@@ -14,6 +14,7 @@ import serial
 import winsound
 from streaming import BetaInlet
 from record_baseline import baseline
+from fatigue import fatigue_VAS
 import csv
 import sys
 import os
@@ -23,14 +24,19 @@ from experiment_parameter import MIexperiment_components
 
 def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 
-	condition_fname = 'result/' + pid + '__continuous_training.csv'
+	condition_fname = 'result/' + pid + '_continuous_training.csv'
+	fatigue_fname = 'result/' + pid + '_fatigue.csv'
 	
 	betaIn = BetaInlet()
 
 	data_buffer = deque([], maxlen=components.N)	#ストリーミングデータ
+	data_buffer_blink = deque([], maxlen=components.N)	#ストリーミングデータ
+	summary = pd.DataFrame()
+
+	fatigue_res = []
 
 	#data_bufferの初期化
-	while len(data_buffer) < betaIn.sampling_rate():	
+	while len(data_buffer) < components.N:	
 		sample, timestamp = betaIn.update()
 		if len(sample) != 0:
 			ROI = components.channels['C4'] if components.df.iloc[[0]].hand.item() == 'left' else components.channels['C3']
@@ -45,7 +51,6 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 
 	clock = core.Clock()
 
-	RT = []
 	for blocks in range(components.blockNum):
 		components.df['block'] = blocks
 
@@ -57,6 +62,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 		if os.path.exists(ERSP_fname):
 			os.remove(ERSP_fname)
 
+		RT = []
 		for i,row in components.df.iterrows():		
 			if row['hand'] == 'left':
 				trigger.SendTrigger('relax_left_b' + str(blocks+1))
@@ -105,15 +111,18 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 			while waiting_key:
 				sample, timestamp = betaIn.update()
 				data_buffer.extend(sample.T[ch])
+				data_buffer_blink.extend(sample.T[1])
 				display_buffer = detrend(data_buffer)
-				psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmin=fmin, fmax=fmax)
-				ERSP = 100 * (np.average(psd) - base) / base
-				if any(display_buffer > 50):
+				display_buffer_blink = detrend(data_buffer_blink)
+				if any(display_buffer_blink > 100):
 					if firstFlag:
 						ERSP = 0
 						firstFlag = False
 					else:
 						ERSP = pre_data
+				else:
+					psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmin=fmin, fmax=fmax)
+					ERSP = 100 * (np.average(psd) - base) / base
 				ERSP_List.append(ERSP)
 				circle_radius = 5*ERSP + 300
 				components.Circle.setRadius(circle_radius)
@@ -143,17 +152,35 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				writer = csv.writer(f, lineterminator='\n')
 				writer.writerow('\n')
 
+		fatigue_res.append(fatigue_VAS(win, components))
 		components.rest(win, blocks+2)
 
-	components.df['RT'] = RT
-	components.df.insert(0, 'day', day)
-	components.df.insert(0, 'condition', 'continuous')
-	components.df.insert(0, 'pid', pid)
+		components.df['RT'] = RT
+		summary = pd.concat([summary, components.df])
+
+	fatigue_df = pd.DataFrame({'fatigue':fatigue_res})
+	fatigue_df.insert(0, 'block', range(components.blockNum))
+	fatigue_df.insert(0, 'day', day)
+	fatigue_df.insert(0, 'condition', 'continuous')
+	fatigue_df.insert(0, 'pid', pid)
+
+	summary.insert(0, 'day', day)
+	summary.insert(0, 'condition', 'control')
+	summary.insert(0, 'pid', pid)
 	if day == 'Day1':
-		components.df.to_csv(condition_fname)
+		summary.to_csv(condition_fname)
+		fatigue_df.to_csv(fatigue_fname)
 	else:
-		train_df = pd.read_csv(condition_fname, index_col=0)
-		pd.concat([train_df, components.df]).to_csv(condition_fname)
+		if os.path.exists(fatigue_fname):
+			fat_df = pd.read_csv(fatigue_fname, index_col=0)
+			pd.concat([fat_df, fatigue_df]).to_csv(fatigue_fname)
+		else:
+			fatigue_df.to_csv(fatigue_fname)
+		if os.path.exists(condition_fname):
+			train_df = pd.read_csv(condition_fname, index_col=0)
+			pd.concat([train_df, summary]).to_csv(condition_fname)
+		else:
+			summary.to_csv(condition_fname)
 		
 	trigger.SendTrigger('training_finish')
 	components.msg.setText('Finish')
