@@ -43,8 +43,9 @@ def performance_test(win, components, instruction, timing, handed):
             components.msg.draw()
             win.flip()
             instruction.PlaySound('otsukaresama')
-            instruction.PlaySound('move_tenkey')
+            move_sound.play()
             event.waitKeys(keyList=['return'])
+            move_sound.stop()
             instruction.PlaySound('PT_next')
 
     df['PTime'] = PTime
