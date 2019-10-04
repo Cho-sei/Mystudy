@@ -64,7 +64,6 @@ def training(baseline):
 		nfb_discrete.discrete_task(win, components, baseline, fmin=8, fmax=13, pid=pid, day=day)
 	else:
 		nfb_continuous.continuous_task(win, components, baseline, fmin=8, fmax=13, pid=pid, day=day)
-	instruction.PresentText(text='Finish', sound='otsukaresama')
 
 def finish():
 	if day != 'Day3':

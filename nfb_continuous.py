@@ -81,7 +81,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				win.flip()
 
 				ch = components.channels['C4']
-				base = baseline[0]
+				base = baseline['C4']
 
 			else:
 				trigger.SendTrigger('relax_right_b' + str(blocks+1))
@@ -100,7 +100,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				win.flip()
 
 				ch = components.channels['C3']
-				base = baseline[1]
+				base = baseline['C3']
 
 			t_start = clock.getTime()
 			t_duration = clock.getTime() - t_start

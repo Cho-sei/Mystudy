@@ -37,7 +37,7 @@ def baseline(win, components, instruction, fmin, fmax, pid, day):
             else:
                 psdList = [np.average(psd_array_multitaper(data[ch], betaIn.sampling_rate(), fmin=fmin, fmax=fmax)[0]) for ch in ['C4', 'C3']]
             baseline = baseline.append(pd.Series([counter]+psdList, index=baseline.columns), ignore_index=True)
-        baseline.to_csv('result/baseline.csv')
+        baseline.to_csv('result/baseline_' + day + '.csv')
         art_prob = baseline[baseline.counter == counter].count() / len(baseline[baseline.counter == counter])
         if all(art_prob > 0.5):
             break

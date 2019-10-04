@@ -1,7 +1,13 @@
 ,pid,condition,timing,trial,hand,PTime
-0,Okubo,control,pre,0,right,21.25583792511054
-1,Okubo,control,pre,0,left,14.051941953042274
+0,Okubo,control,pre,0,right,21.255837925110537
+1,Okubo,control,pre,0,left,14.051941953042276
 2,Okubo,control,pre,1,right,12.78214119499205
-3,Okubo,control,pre,1,left,13.010297455226578
-4,Okubo,control,pre,2,right,13.270541954191344
+3,Okubo,control,pre,1,left,13.01029745522658
+4,Okubo,control,pre,2,right,13.270541954191346
 5,Okubo,control,pre,2,left,13.472461403216471
+0,Okubo,control,post,0,right,12.33542911251061
+1,Okubo,control,post,0,left,11.353775926552771
+2,Okubo,control,post,1,right,11.471171481060082
+3,Okubo,control,post,1,left,12.307300803939142
+4,Okubo,control,post,2,right,11.839727285680056
+5,Okubo,control,post,2,left,12.579555849055396

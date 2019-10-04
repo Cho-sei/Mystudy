@@ -4,6 +4,8 @@ import pandas as pd
 from instruction import instruction
 from experiment_parameter import MIexperiment_components
 
+move_sound = sound.Sound('voicedata/move_tenkey.wav')
+
 def performance_test(win, components, instruction, timing, handed):
     #DataFrame
     trial_proc = ('left', 'right') if handed == 'left' else ('right', 'left')

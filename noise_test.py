@@ -7,12 +7,12 @@ betaIn = BetaInlet()
 
 fmin, fmax = 8, 13
 while True:
-	data = betaIn.DataAquisition(electrode=['C3', 'C4'], duration=1, fmin=fmin, fmax=fmax)
+	data = betaIn.DataAquisition(electrode=['Fp1', 'C3', 'C4'], duration=1)
 	psdList = []
-	for ch in data:
-		detrend_buffer = detrend(data[ch])
-		if any(detrend_buffer > 50):
-			psdList.append(None)
-		else:
-			psdList.append(np.average(psd_array_multitaper(detrend_buffer, betaIn.sampling_rate(), fmin=fmin, fmax=fmax)[0]))
+	
+	if any(data['Fp1'] > 100):
+		psdList = [None] * 2
+	else:
+		for ch in ['C3', 'C4']:
+			psdList.append(np.average(psd_array_multitaper(data[ch], betaIn.sampling_rate(), fmin=fmin, fmax=fmax)[0]))
 	print(psdList)

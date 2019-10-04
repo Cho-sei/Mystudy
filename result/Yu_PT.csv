@@ -1,7 +1,13 @@
 ,pid,condition,timing,trial,hand,PTime
-0,Yu,continuous,pre,0,right,9.024366420213823
-1,Yu,continuous,pre,0,left,9.994342387811116
+0,Yu,continuous,pre,0,right,9.024366420213825
+1,Yu,continuous,pre,0,left,9.994342387811118
 2,Yu,continuous,pre,1,right,8.0321422853076
-3,Yu,continuous,pre,1,left,8.842518430332461
+3,Yu,continuous,pre,1,left,8.84251843033246
 4,Yu,continuous,pre,2,right,7.632293512476963
 5,Yu,continuous,pre,2,left,8.366090792992736
+0,Yu,continuous,post,0,right,7.8503560807212125
+1,Yu,continuous,post,0,left,8.26815720565537
+2,Yu,continuous,post,1,right,8.468390558038664
+3,Yu,continuous,post,1,left,8.300608202420335
+4,Yu,continuous,post,2,right,8.938736572278685
+5,Yu,continuous,post,2,left,9.264307580811874
