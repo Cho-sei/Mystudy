@@ -28,10 +28,8 @@ task_left_b5,26
 relax_right_b5,27
 task_right_b5,28
 rest,29
-training_finish,30
 Mitest_post,31
 Mitest_post_relaxleft,32
 Mitest_post_taskleft,33
 Mitest_post_relaxright,34
 Mitest_post_taskright,35
-finish,36
