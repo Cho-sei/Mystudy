@@ -103,7 +103,7 @@ class instruction():
             self.PresentImg(img='day_flow/スライド16', sound='prac_PT_left_last')
             event.waitKeys(keyList=['return'])
             self.win.flip()
-            self.PlaySound('confirmation')
+            self.PresentText(text=u'できる限り早く\n課題を行ってください', sound='confirmation_PT')
             event.waitKeys(keyList=['return'])
         self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_PT')
         self.PresentText(text='Ready', sound='start')
