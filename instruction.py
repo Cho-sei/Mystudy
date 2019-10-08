@@ -13,7 +13,7 @@ class instruction():
         soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 21)] 
+        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 22)] 
         imgnameList.append('back_right_0')
         self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.PNG')] for imgname in imgnameList])
         
@@ -117,7 +117,7 @@ class instruction():
         if timing == 'pre':
             self.PresentText(text=u'運動イメージ課題', sound='into_inst_MItest')            
             self.PresentText(text='Relax', sound='viz_relax')
-            self.PresentText(text=' Left\n  or\nRight', sound='inst_cue')
+            self.PresentImg(img='day_flow/スライド21', sound='inst_cue')
             self.components.fixation.draw()
             self.win.flip()
             self.PlaySound('viz_fixation')

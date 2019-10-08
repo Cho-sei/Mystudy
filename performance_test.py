@@ -44,7 +44,7 @@ def performance_test(win, components, instruction, timing, handed):
 
         win.flip()
 
-        core.wait(0.5)
+        core.wait(components.cue_duration)
 
         components.fixation.draw()
         win.flip()
