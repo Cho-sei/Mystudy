@@ -185,7 +185,6 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 		else:
 			summary.to_csv(condition_fname)
 		
-	trigger.SendTrigger('training_finish')
 	core.wait(1)
 
 if __name__ == '__main__':

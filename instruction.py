@@ -13,7 +13,7 @@ class instruction():
         soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 19)] 
+        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 21)] 
         imgnameList.append('back_right_0')
         self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.PNG')] for imgname in imgnameList])
         
@@ -84,8 +84,8 @@ class instruction():
             self.PresentImg(img='day_flow/スライド9', sound='inst_PT_rightside')
             self.PresentImg(img='day_flow/スライド10', sound='inst_PT_rotate')
             self.PresentImg(img='day_flow/スライド11', sound='inst_PT_rotate_all')
-            self.PresentImg(img='day_flow/スライド12', sound='inst_PT_last')
-            self.PresentImg(img='day_flow/スライド18', sound='inst_PT_last_all')
+            self.PresentImg(img='day_flow/スライド18', sound='inst_PT_last')
+            self.PresentImg(img='day_flow/スライド12', sound='inst_PT_last_all')
             self.PresentImg(img='day_flow/スライド13', sound='inst_PT_enter')
             self.PresentText(text='Left', sound='inst_PT_left')
             self.PresentImg(img='day_flow/スライド14', sound='inst_PT_left_first')
@@ -97,6 +97,8 @@ class instruction():
             self.PresentImg(img='day_flow/スライド10', sound='prac_PT_right_rotate', wait_time=2)
             self.PresentImg(img='day_flow/スライド11', sound='prac_PT_right_rotateall', wait_time=4)
             self.PresentImg(img='day_flow/スライド17', sound='prac_PT_right_last')
+            event.waitKeys(keyList=['return'])
+            self.PresentImg(img='day_flow/スライド19', sound='move_tenkey')
             event.waitKeys(keyList=['return'])
             self.PresentImg(img='day_flow/スライド14', sound='prac_PT_left_first', wait_time=3)
             self.PresentImg(img='day_flow/スライド15', sound='prac_PT_left_rotate', wait_time=4)
@@ -131,7 +133,7 @@ class instruction():
     def inst_training(self, condition=None):
         if condition != None:
             self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_inst_training')
-            self.PresentText(text=u'Relax      →      Left or Right      →      +', sound='inst_training_flow')
+            self.PresentText(text=u'Relax\n　↓　\nLeft or Right\n　↓　\n　+', sound='inst_training_flow')
             if condition == 'control':
                 self.soundDict['FB_control'].play()
                 self.viz_circle(self.soundDict['FB_control'].getDuration() + 1)
@@ -195,4 +197,4 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
-    instruction.inst_PT('pre')
+    instruction.inst_training('pre')

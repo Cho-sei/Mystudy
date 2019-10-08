@@ -80,8 +80,9 @@ if __name__ == '__main__':
 
     event.waitKeys(keyList=['space'])
 
-    intro()
-    handed = flandars_test()
+    #intro()
+    #handed = flandars_test()
+    handed='right'
     PT(handed)
 
     event.waitKeys(keyList=['space'])

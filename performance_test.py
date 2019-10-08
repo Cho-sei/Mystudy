@@ -4,7 +4,6 @@ import pandas as pd
 from instruction import instruction
 from experiment_parameter import MIexperiment_components
 
-move_sound = sound.Sound('voicedata/move_tenkey.wav')
 
 def performance_test(win, components, instruction, timing, handed):
     #DataFrame
@@ -59,9 +58,11 @@ def performance_test(win, components, instruction, timing, handed):
             components.msg.draw()
             win.flip()
             instruction.PlaySound('otsukaresama')
-            move_sound.play()
+            if row['hand'] == 'left':
+                instruction.PresentImg(img='day_flow/スライド20', sound='move_tenkey')
+            else:
+                instruction.PresentImg(img='day_flow/スライド19', sound='move_tenkey')
             event.waitKeys(keyList=['return'])
-            move_sound.stop()
             instruction.PlaySound('PT_next')
 
     df['PTime'] = PTime

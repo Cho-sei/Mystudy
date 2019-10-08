@@ -11,7 +11,7 @@ def fatigue_VAS(win, components):
     inst_fatigue.play()
     ratingScale = visual.RatingScale(
         win, high=7, size=2.0, pos=(0.0, -200), scale=False, labels=False,
-        showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5, tickMarks=[0, 10],
+        showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5, tickMarks=[1, 7],
         markerStart=4, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return', noMouse=True)
     while ratingScale.noResponse:
         components.msg.setText(u'現在の疲労度を\nお答えください。')
@@ -38,14 +38,14 @@ def fatigue_VAS(win, components):
     inst_concenterate.play()
     ratingScale = visual.RatingScale(
         win, high=7, size=2.0, pos=(0.0, -200), scale=False, labels=False,
-        showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5, tickMarks=[0, 10],
+        showValue=False, acceptPreText=u'Enter', acceptText='Enter', textSize=0.5, tickMarks=[1, 7],
         markerStart=4, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return', noMouse=True)
     while ratingScale.noResponse:
         components.msg.setText(u'現在の集中度を\nお答えください。')
         components.msg.setPos((0, 100))
         components.msg.setHeight(60)
         components.msg.draw()
-        components.msg.setText(u'全く集中できていない状態')
+        components.msg.setText(u'全く集中\nできていない状態')
         components.msg.setPos((-750, -200))
         components.msg.setHeight(30)
         components.msg.draw()

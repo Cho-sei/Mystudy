@@ -138,7 +138,6 @@ def control_task(win, components, pid, day):
 			summary.to_csv(condition_fname)
 
 
-	trigger.SendTrigger('training_finish')
 	core.wait(1)
 
 if __name__ == '__main__':
