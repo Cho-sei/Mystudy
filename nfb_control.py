@@ -18,6 +18,7 @@ def control_task(win, components, pid, day):
 	summary = pd.DataFrame()
 
 	fatigue_res = []
+	concentrate_res = []
 
 	#define dummy
 	if day == 'Day1':
@@ -104,13 +105,15 @@ def control_task(win, components, pid, day):
 			win.flip()
 			core.wait(components.FB_duration + random.choice(components.wait_time_list))
 
-		fatigue_res.append(fatigue_VAS(win, components))
+		fatigue_return = fatigue_VAS(win, components)
+		fatigue_res.append(fatigue_return[0])
+		concentrate_res.append(fatigue_return[1])
 		components.rest(win, blocks+2)
 
 		components.df['RT'] = RT
 		summary = pd.concat([summary, components.df])
 
-	fatigue_df = pd.DataFrame({'fatigue':fatigue_res})
+	fatigue_df = pd.DataFrame({'fatigue':fatigue_res, 'concentrate':concentrate_res})
 	fatigue_df.insert(0, 'block', range(components.blockNum))
 	fatigue_df.insert(0, 'day', day)
 	fatigue_df.insert(0, 'condition', 'control')
@@ -136,9 +139,6 @@ def control_task(win, components, pid, day):
 
 
 	trigger.SendTrigger('training_finish')
-	components.msg.setText('Finish')
-	components.msg.draw()
-	win.flip()
 	core.wait(1)
 
 if __name__ == '__main__':

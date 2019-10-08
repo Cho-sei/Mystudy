@@ -34,6 +34,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 	summary = pd.DataFrame()
 
 	fatigue_res = []
+	concentrate_res = []
 
 	#data_bufferの初期化
 	while len(data_buffer) < components.N:	
@@ -152,13 +153,15 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 				writer = csv.writer(f, lineterminator='\n')
 				writer.writerow('\n')
 
-		fatigue_res.append(fatigue_VAS(win, components))
+		fatigue_return = fatigue_VAS(win, components)
+		fatigue_res.append(fatigue_return[0])
+		concentrate_res.append(fatigue_return[1])
 		components.rest(win, blocks+2)
 
 		components.df['RT'] = RT
 		summary = pd.concat([summary, components.df])
 
-	fatigue_df = pd.DataFrame({'fatigue':fatigue_res})
+	fatigue_df = pd.DataFrame({'fatigue':fatigue_res, 'concentrate':concentrate_res})
 	fatigue_df.insert(0, 'block', range(components.blockNum))
 	fatigue_df.insert(0, 'day', day)
 	fatigue_df.insert(0, 'condition', 'continuous')
@@ -183,9 +186,6 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 			summary.to_csv(condition_fname)
 		
 	trigger.SendTrigger('training_finish')
-	components.msg.setText('Finish')
-	components.msg.draw()
-	win.flip()
 	core.wait(1)
 
 if __name__ == '__main__':

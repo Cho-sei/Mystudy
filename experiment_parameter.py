@@ -19,11 +19,11 @@ class MIexperiment_components(object):
 
         #parameter
         self.N = 512
-        self.blockNum = 5
+        self.blockNum = 1
         self.ready_duration = 1         
-        self.relax_duration = 4         
-        self.rest_duration = 60       
-        self.trialNum = 5
+        self.relax_duration = 1         
+        self.rest_duration = 1       
+        self.trialNum = 1
         self.baseline_duration = 5
         self.MItask_trial = 5
         self.MRtrial = 3

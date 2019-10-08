@@ -65,12 +65,6 @@ def training(baseline):
 	else:
 		nfb_continuous.continuous_task(win, components, baseline, fmin=8, fmax=13, pid=pid, day=day)
 
-def finish():
-	if day != 'Day3':
-		instruction.inst_finish(day)
-	else:
-		instruction.PresentText(text='Finish', sound='otsukaresama')
-
 if __name__ == '__main__':
 
 	components.msg.setText('wait')
@@ -85,7 +79,6 @@ if __name__ == '__main__':
 	baseline = record_resting()
 	training(baseline)
 	MItask('post')
-	finish()
 
 
 	event.waitKeys(keyList=['space'])

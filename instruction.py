@@ -13,7 +13,8 @@ class instruction():
         soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-        imgnameList = ['day_flow/スライド1', 'day_flow/スライド2', 'day_flow/スライド3', 'day_flow/スライド4', 'back_right_0']
+        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 19)] 
+        imgnameList.append('back_right_0')
         self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.PNG')] for imgname in imgnameList])
         
         self.dummy = [-6.852039504, 3.711962456, -16.51470402, -23.43944568, -23.96121308, -28.59563485, -34.98797214, -31.84493135, 
@@ -74,8 +75,36 @@ class instruction():
             self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_inst_PT')
             event.waitKeys(keyList=['return'])
             self.PlaySound('inst_PT')
+            self.PresentImg(img='day_flow/スライド5', sound='inst_PT_borad')
+            self.PresentText(text='Relax', sound='viz_relax')
+            self.PresentText(text=' Left \n   or   \n Right', sound='inst_PT_cue')
+            self.PresentImg(img='day_flow/スライド6', sound='inst_PT_right')
+            self.PresentImg(img='day_flow/スライド7', sound='inst_PT_first')
+            self.PresentImg(img='day_flow/スライド8', sound='inst_PT_second')
+            self.PresentImg(img='day_flow/スライド9', sound='inst_PT_rightside')
+            self.PresentImg(img='day_flow/スライド10', sound='inst_PT_rotate')
+            self.PresentImg(img='day_flow/スライド11', sound='inst_PT_rotate_all')
+            self.PresentImg(img='day_flow/スライド12', sound='inst_PT_last')
+            self.PresentImg(img='day_flow/スライド18', sound='inst_PT_last_all')
+            self.PresentImg(img='day_flow/スライド13', sound='inst_PT_enter')
+            self.PresentText(text='Left', sound='inst_PT_left')
+            self.PresentImg(img='day_flow/スライド14', sound='inst_PT_left_first')
+            self.PresentImg(img='day_flow/スライド15', sound='inst_PT_left_rotate')
+            self.PresentImg(img='day_flow/スライド16', sound='inst_PT_left_enter')
+            self.PresentImg(img='day_flow/スライド7', sound='prac_PT_right_first', wait_time=2)
+            self.PresentImg(img='day_flow/スライド8', sound='prac_PT_right_second', wait_time=2)
+            self.PresentImg(img='day_flow/スライド9', sound='prac_PT_right_third', wait_time=4)
+            self.PresentImg(img='day_flow/スライド10', sound='prac_PT_right_rotate', wait_time=2)
+            self.PresentImg(img='day_flow/スライド11', sound='prac_PT_right_rotateall', wait_time=4)
+            self.PresentImg(img='day_flow/スライド17', sound='prac_PT_right_last')
             event.waitKeys(keyList=['return'])
-            self.PlaySound('inst_PT_enter')
+            self.PresentImg(img='day_flow/スライド14', sound='prac_PT_left_first', wait_time=3)
+            self.PresentImg(img='day_flow/スライド15', sound='prac_PT_left_rotate', wait_time=4)
+            self.PresentImg(img='day_flow/スライド16', sound='prac_PT_left_last')
+            event.waitKeys(keyList=['return'])
+            self.win.flip()
+            self.PlaySound('confirmation')
+            event.waitKeys(keyList=['return'])
         self.PresentText(text=u'運動パフォーマンス\nテスト', sound='into_PT')
         self.PresentText(text='Ready', sound='start')
     
@@ -143,17 +172,17 @@ class instruction():
                     j = 0
                 t_duration = clock.getTime() - t_start
     
-    def PresentText(self, text, sound):
+    def PresentText(self, text, sound, wait_time=1):
         self.components.msg.setPos((0, 0))
         self.components.msg.setText(text)
         self.components.msg.draw()
         self.win.flip()
-        self.PlaySound(sound)
+        self.PlaySound(sound, wait_time)
     
-    def PresentImg(self, img, sound):
+    def PresentImg(self, img, sound, wait_time=1):
         self.imgDict[img].draw()
         self.win.flip()
-        self.PlaySound(sound)
+        self.PlaySound(sound, wait_time)
 
     def PlaySound(self, soundname, wait_time=1):
         self.soundDict[soundname].play()
@@ -166,5 +195,4 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
-    instruction.inst_train_proc()
-    instruction.inst_MItest('pre')
+    instruction.inst_PT('pre')

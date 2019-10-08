@@ -18,22 +18,38 @@ def performance_test(win, components, instruction, timing, handed):
     
     clock = core.Clock()
 
+    #display stimulus
+    components.msg.setText('Start')
+    components.msg.draw()
+    win.flip()
+
+    core.wait(components.ready_duration)
+
     PTime = []
     for i, row in df.iterrows():
         
-        if row['hand'] == 'left':
-            sound = 'lefthand'
-            components.msg.setText(u'左手')
-        else:
-            sound = 'righthand'
-            components.msg.setText(u'右手')
-
+        components.msg.setText('Relax')
         components.msg.draw()
         win.flip()
 
-        instruction.PlaySound(sound)
+        core.wait(components.relax_duration)
 
-        instruction.PlaySound('PT_start')
+        if row['hand'] == 'left':
+                    
+            components.cue.setText('Left')
+            components.cue.draw()
+            
+        else:
+            components.cue.setText('Right')
+            components.cue.draw()
+
+        win.flip()
+
+        core.wait(0.5)
+
+        components.fixation.draw()
+        win.flip()
+
         t_start = clock.getTime()
         key = event.waitKeys(keyList=['return'])
         PTime.append(clock.getTime() - t_start)
@@ -62,7 +78,7 @@ if __name__ == '__main__':
     instruction = instruction(win, components)
 
     Ptest_df = performance_test(win, components, instruction, 'pre', 'right')
-    Ptest_df.to_csv('result/test_Ptest.csv')
+    Ptest_df.to_csv('result/tamura_Ptest_orange.csv')
 
     Ptest_df_post = performance_test(win, components, instruction, 'post', 'right')
     PT_df = pd.read_csv('result/test_Ptest.csv', index_col=0)
