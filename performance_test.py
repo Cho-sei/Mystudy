@@ -78,7 +78,7 @@ if __name__ == '__main__':
     instruction = instruction(win, components)
 
     Ptest_df = performance_test(win, components, instruction, 'pre', 'right')
-    Ptest_df.to_csv('result/test_Ptest.csv')
+    Ptest_df.to_csv('result/tamura_Ptest_orange.csv')
 
     Ptest_df_post = performance_test(win, components, instruction, 'post', 'right')
     PT_df = pd.read_csv('result/test_Ptest.csv', index_col=0)
