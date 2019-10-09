@@ -35,6 +35,8 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 
 	fatigue_res = []
 	concentrate_res = []
+	difficulty_res = []
+	prediction_res = []
 
 	#data_bufferの初期化
 	while len(data_buffer) < components.N:	
@@ -156,12 +158,17 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 		fatigue_return = fatigue_VAS(win, components)
 		fatigue_res.append(fatigue_return[0])
 		concentrate_res.append(fatigue_return[1])
+		difficulty_res.append(fatigue_return[2])
+		prediction_res.append(fatigue_return[3])
 		components.rest(win, blocks+2)
 
 		components.df['RT'] = RT
 		summary = pd.concat([summary, components.df])
 
-	fatigue_df = pd.DataFrame({'fatigue':fatigue_res, 'concentrate':concentrate_res})
+	fatigue_df = pd.DataFrame({'fatigue':fatigue_res, 
+							   'concentrate':concentrate_res,
+							   'difficulty':difficulty_res,
+							   'prediction':prediction_res})
 	fatigue_df.insert(0, 'block', range(components.blockNum))
 	fatigue_df.insert(0, 'day', day)
 	fatigue_df.insert(0, 'condition', 'continuous')
@@ -176,7 +183,7 @@ def continuous_task(win, components, baseline, fmin, fmax, pid, day):
 	else:
 		if os.path.exists(fatigue_fname):
 			fat_df = pd.read_csv(fatigue_fname, index_col=0)
-			pd.concat([fat_df, fatigue_df]).to_csv(fatigue_fname)
+			pd.concat([fat_df, fatigue_df], sort=False).to_csv(fatigue_fname)
 		else:
 			fatigue_df.to_csv(fatigue_fname)
 		if os.path.exists(condition_fname):
