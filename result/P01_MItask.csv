@@ -1,0 +1,11 @@
+,pid,condition,day,timing,block,hand,RT
+0,P01,continuous,Day1,pre,0,left,2.361015870778374
+1,P01,continuous,Day1,pre,0,right,0.5528499257081876
+2,P01,continuous,Day1,pre,1,left,0.21097758525002064
+3,P01,continuous,Day1,pre,1,right,0.18236169041620087
+4,P01,continuous,Day1,pre,2,right,0.22972274689004735
+5,P01,continuous,Day1,pre,2,left,0.18189130893597394
+6,P01,continuous,Day1,pre,3,left,0.22436430509355887
+7,P01,continuous,Day1,pre,3,right,0.35503267963827057
+8,P01,continuous,Day1,pre,4,right,0.17746711830432105
+9,P01,continuous,Day1,pre,4,left,0.7182882251029241

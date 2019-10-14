@@ -63,7 +63,6 @@ if __name__ == '__main__':
 
 	inst()
 	MItask('pre')
-	inst_train()
 	training()
 	MItask('post')
 
