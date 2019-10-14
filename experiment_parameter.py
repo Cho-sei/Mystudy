@@ -21,7 +21,7 @@ class MIexperiment_components(object):
         self.N = 512
         self.blockNum = 2
         self.ready_duration = 1         
-        self.relax_duration = 1         
+        self.relax_duration = 3         
         self.rest_duration = 1       
         self.trialNum = 1
         self.baseline_duration = 5
