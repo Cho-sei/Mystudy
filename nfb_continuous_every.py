@@ -32,7 +32,7 @@ def continuous_task(win, components, fmin, fmax, pid, day):
 	data_buffer = deque([], maxlen=components.N)	#ストリーミングデータ
 	data_buffer_blink = deque([], maxlen=components.N)	#ストリーミングデータ
 	summary = pd.DataFrame()
-	pre_baseline = [500, 500]
+	pre_baseline = pd.DataFrame({'C4':[500], 'C3':[500]})
 
 	fatigue_res = []
 	concentrate_res = []

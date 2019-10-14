@@ -19,15 +19,15 @@ class MIexperiment_components(object):
 
         #parameter
         self.N = 512
-        self.blockNum = 2
+        self.blockNum = 5
         self.ready_duration = 1         
-        self.relax_duration = 3         
-        self.rest_duration = 1       
-        self.trialNum = 1
+        self.relax_duration = 5         
+        self.rest_duration = 60       
+        self.trialNum = 5
         self.baseline_duration = 5
         self.MItask_trial = 5
-        self.MRtrial = 1
-        self.PTtrial = 1
+        self.MRtrial = 3
+        self.PTtrial = 5
         self.FB_duration = 1.5
         self.cue_duration = 3
         self.artifact_th = 100
@@ -71,6 +71,8 @@ class MIexperiment_components(object):
         for time in reversed(range(1, self.rest_duration+1)):
             if blocknum <= self.blockNum:
                 self.msg.setText('Rest\n次は、第' + str(blocknum) + 'ブロックです')
+            elif blocknum > 10:
+                self.msg.setText('Rest\n次は、運動イメージトレーニングです')
             else:
                 self.msg.setText('Rest\n次は、運動イメージ課題です')
             self.msg.draw()

@@ -9,7 +9,7 @@ inst_difficulty = sound.Sound('voicedata/inst_difficulty.wav')
 inst_prediction = sound.Sound('voicedata/inst_prediction.wav')
 
 NumkeyList = ['num_0', 'num_1', 'num_2', 'num_3', 'num_4', 'num_5', 'num_6', 'num_7', 'num_8', 'num_9']
-DeleteList = ['delete', 'num_delete']
+DeleteList = ['delete', 'num_delete', 'backspace']
 
 def fatigue_VAS(win, components):
     #difficulty
@@ -50,9 +50,9 @@ def fatigue_VAS(win, components):
         components.msg.setPos((0, 100))
         components.msg.setHeight(60)
         components.msg.draw()
-        components.msg.setText(u'0 ～ 100 % で、数字を入力してEnterを押してください。')
+        components.msg.setText(u'0 ～ 100の範囲で、\n数字を入力してEnterを押してください。')
         components.msg.setPos((0, 0))
-        components.msg.setHeight(60)
+        components.msg.setHeight(50)
         components.msg.draw()
         components.msg.setText(u'%')
         components.msg.setPos((100, -200))

@@ -63,6 +63,7 @@ if __name__ == '__main__':
 
 	inst()
 	MItask('pre')
+	components.rest(win, 20)
 	training()
 	MItask('post')
 

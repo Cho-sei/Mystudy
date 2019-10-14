@@ -1,10 +1,13 @@
 from psychopy import core, visual, event, sound
 from experiment_parameter import MIexperiment_components
 
-win, win0 = visual.Window(units='pix', fullscr=True, allowGUI=False)
+win = visual.Window(units='pix', fullscr=True, allowGUI=False)
 components = MIexperiment_components(win)
 
-win.set
+keys = event.waitKeys()
+components.msg.setText(keys)
+components.msg.draw()
+win.flip()
 
 core.wait(1)
 

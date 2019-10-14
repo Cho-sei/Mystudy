@@ -6,6 +6,7 @@ import numpy as np
 import winsound
 from trigger import trigger
 from experiment_parameter import MIexperiment_components
+import random
 
 def MI_task(win, components, timing):
 	#DataFrame
@@ -67,7 +68,10 @@ def MI_task(win, components, timing):
 
 		t_start = clock.getTime()
 		key = event.waitKeys(keyList=['return'])
-		RT.append(clock.getTime() - t_start)	
+		RT.append(clock.getTime() - t_start)
+
+		win.flip()
+		core.wait(components.FB_duration + random.choice(components.wait_time_list))	
 
 	components.msg.setText('Finish')
 	components.msg.draw()
