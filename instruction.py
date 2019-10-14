@@ -13,7 +13,7 @@ class instruction():
         soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 22)] 
+        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 23)] 
         imgnameList.append('back_right_0')
         self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.PNG')] for imgname in imgnameList])
         
@@ -122,6 +122,37 @@ class instruction():
             self.win.flip()
             self.PlaySound('viz_fixation')
             self.PresentText(text='Relax', sound='repeat')
+            self.PresentText(text=u'練習', sound='into_prac')
+            self.PresentText(text='Relax', sound='prac_relax', wait_time=2)
+            self.PresentText(text='Left', sound='prac_left_cue', wait_time=2)
+            self.PlaySound('prac_left_MI', wait_time=2)
+            self.components.fixation.draw()
+            self.win.flip()
+            event.waitKeys(keyList=['return'])
+            self.PresentText(text='', sound='otsukaresama')
+            self.PresentText(text='Relax', sound='prac_relax_rep', wait_time=2)
+            self.PresentText(text='Right', sound='prac_right_cue', wait_time=2)
+            self.PlaySound('prac_right_MI', wait_time=2)
+            self.components.fixation.draw()
+            self.win.flip()
+            event.waitKeys(keyList=['return'])
+            self.PresentText(text='', sound='otsukaresama')
+            self.PresentText(text=u'練習', sound='into_MIprac')
+            for hand in ['Left', 'Right', 'Left', 'Left', 'Right']:
+                self.components.msg.setText('Relax')
+                self.components.msg.draw()
+                self.win.flip()
+                core.wait(self.components.relax_duration)
+                self.components.msg.setText(hand)
+                self.components.msg.draw()
+                self.win.flip()
+                core.wait(self.components.cue_duration)
+                self.components.fixation.draw()
+                self.win.flip()
+                event.waitKeys(keyList=['return'])
+                self.win.flip()
+                core.wait(1)
+            self.PresentText(text='', sound='otsukaresama')
         else:
             self.PresentText(text=u'運動イメージ課題', sound='into_MItest')
             self.PresentText(text='Ready', sound='start')
@@ -133,7 +164,7 @@ class instruction():
     def inst_training(self, condition=None):
         if condition != None:
             self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_inst_training')
-            self.PresentText(text=u'Relax\n　↓　\nLeft or Right\n　↓　\n　+', sound='inst_training_flow')
+            self.PresentImg(img='day_flow/スライド22', sound='inst_training_flow')
             if condition == 'control':
                 self.soundDict['FB_control'].play()
                 self.viz_circle(self.soundDict['FB_control'].getDuration() + 1)
@@ -164,15 +195,15 @@ class instruction():
 
         j = 0
         while t_duration < soundDuration:	
-                self.components.Circle.setRadius(5*self.dummy[j] + 300)
-                self.components.Circle.draw()
-                self.components.fixation.draw()
-                core.wait(.1)
-                self.win.flip()
-                j += 1
-                if j == len(self.dummy):
-                    j = 0
-                t_duration = clock.getTime() - t_start
+            self.components.Circle.setRadius(5*self.dummy[j] + 300)
+            self.components.Circle.draw()
+            self.components.fixation.draw()
+            core.wait(.1)
+            self.win.flip()
+            j += 1
+            if j == len(self.dummy):
+                j = 0
+            t_duration = clock.getTime() - t_start
     
     def PresentText(self, text, sound, wait_time=1):
         self.components.msg.setPos((0, 0))
@@ -197,4 +228,5 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
-    instruction.inst_training('pre')
+    #instruction.inst_training('continuous')
+    instruction.viz_circle(float('inf'))

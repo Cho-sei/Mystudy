@@ -1,9 +1,8 @@
 from psychopy import core, visual, event, sound
 import numpy as np
-import record_baseline
 import nfb_control
-import nfb_discrete
-import nfb_continuous
+import nfb_discrete_every
+import nfb_continuous_every
 import Motor_Imagery_task
 import sys
 from trigger import trigger
@@ -27,7 +26,6 @@ def inst():
 	trigger.SendTrigger('start')
 	if day == 'Day1':
 		instruction.inst_train_proc()
-		instruction.inst_MItest('pre')
 	else:
 		instruction.introduction(day)
 
@@ -45,25 +43,15 @@ def MItask(timing):
 		MI_df = pd.read_csv('result/' + pid + '_MItask.csv', index_col=0)
 		pd.concat([MI_df, MI_result]).to_csv('result/' + pid + '_MItask.csv')
 
-def inst_train():
-	if day == 'Day1':
-		instruction.inst_training(condition)
-
-def record_resting():
-	instruction.inst_resting()
-	baseline = record_baseline.baseline(win, components, instruction, fmin=8, fmax=13, pid=pid, day=day)
-	instruction.PresentText(text='Finish', sound='otsukaresama')
-	return baseline
-
-def training(baseline):
+def training():
 	instruction.inst_training()
 	trigger.SendTrigger('training_start')
 	if condition == 'control':
 		nfb_control.control_task(win, components, pid=pid, day=day)
 	elif condition == 'discrete':
-		nfb_discrete.discrete_task(win, components, baseline, fmin=8, fmax=13, pid=pid, day=day)
+		nfb_discrete_every.discrete_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
 	else:
-		nfb_continuous.continuous_task(win, components, baseline, fmin=8, fmax=13, pid=pid, day=day)
+		nfb_continuous_every.continuous_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
 
 if __name__ == '__main__':
 
@@ -76,8 +64,7 @@ if __name__ == '__main__':
 	inst()
 	MItask('pre')
 	inst_train()
-	baseline = record_resting()
-	training(baseline)
+	training()
 	MItask('post')
 
 

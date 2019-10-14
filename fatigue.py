@@ -50,7 +50,7 @@ def fatigue_VAS(win, components):
         components.msg.setPos((0, 100))
         components.msg.setHeight(60)
         components.msg.draw()
-        components.msg.setText(u'0 ～ 100 %')
+        components.msg.setText(u'0 ～ 100 % で、数字を入力してEnterを押してください。')
         components.msg.setPos((0, 0))
         components.msg.setHeight(60)
         components.msg.draw()

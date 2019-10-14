@@ -68,6 +68,10 @@ def MR():
     MR_pre_result.insert(0, 'pid', pid)
     MR_pre_result.to_csv('result/' + pid + '_MR.csv')
 
+def inst():
+    instruction.inst_MItest('pre')
+    instruction.inst_training(condition)
+
 def rest():
     instruction.PresentText(text=u'休憩', sound='into_rest')
     event.waitKeys(keyList=['space'])
@@ -80,15 +84,15 @@ if __name__ == '__main__':
 
     event.waitKeys(keyList=['space'])
 
-    #intro()
-    #handed = flandars_test()
-    handed='right'
+    intro()
+    handed = flandars_test()
     PT(handed)
 
     event.waitKeys(keyList=['space'])
     
     KVIQ_test(handed)
     MR()
+    inst()
     rest()
 
     event.waitKeys(keyList=['space'])

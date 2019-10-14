@@ -26,10 +26,10 @@ class MIexperiment_components(object):
         self.trialNum = 1
         self.baseline_duration = 5
         self.MItask_trial = 5
-        self.MRtrial = 3
-        self.PTtrial = 3
+        self.MRtrial = 1
+        self.PTtrial = 1
         self.FB_duration = 1.5
-        self.cue_duration = 2
+        self.cue_duration = 3
         self.artifact_th = 100
         self.wait_time_list = [.6, .7, .8, .9, 1]
 

@@ -20,7 +20,7 @@ def hand_lateralization_task(win, components, timing):
 
     Image = visual.ImageStim(win)
 
-    components.msg.setText('start')
+    components.msg.setText('Start')
     components.msg.draw()
     win.flip()
 
