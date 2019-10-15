@@ -4,7 +4,6 @@ import pandas as pd
 from instruction import instruction
 from experiment_parameter import MIexperiment_components
 
-
 def performance_test(win, components, instruction, timing, handed):
     #DataFrame
     trial_proc = ('left', 'right') if handed == 'left' else ('right', 'left')
@@ -14,6 +13,10 @@ def performance_test(win, components, instruction, timing, handed):
     ))
     df = pd.DataFrame(
         conditions, columns=('trial', 'hand'))
+
+    move2right = visual.ImageStim(win, 'InstImage/day_flow/スライド20.PNG')
+    move2left = visual.ImageStim(win, 'InstImage/day_flow/スライド19.PNG')
+    moveTenkey = sound.Sound('voicedata/move_tenkey.wav')
     
     clock = core.Clock()
 
@@ -58,11 +61,17 @@ def performance_test(win, components, instruction, timing, handed):
             components.msg.draw()
             win.flip()
             instruction.PlaySound('otsukaresama')
-            if row['hand'] == 'left':
-                instruction.PresentImg(img='day_flow/スライド20', sound='move_tenkey')
-            else:
-                instruction.PresentImg(img='day_flow/スライド19', sound='move_tenkey')
-            event.waitKeys(keyList=['return'])
+            moveTenkey.play()
+            while True:
+                if row['hand'] == 'left':
+                    image = move2right
+                else:
+                    image = move2left
+                image.draw()
+                win.flip()
+                if 'return' in event.getKeys(keyList=['return']):
+                    break
+            moveTenkey.stop()
             instruction.PlaySound('PT_next')
 
     df['PTime'] = PTime
@@ -79,7 +88,7 @@ if __name__ == '__main__':
     instruction = instruction(win, components)
 
     Ptest_df = performance_test(win, components, instruction, 'pre', 'right')
-    Ptest_df.to_csv('result/tamura_Ptest_orange.csv')
+    Ptest_df.to_csv('pre_result/tamura_Ptest_orange.csv')
 
     Ptest_df_post = performance_test(win, components, instruction, 'post', 'right')
     PT_df = pd.read_csv('result/test_Ptest.csv', index_col=0)
