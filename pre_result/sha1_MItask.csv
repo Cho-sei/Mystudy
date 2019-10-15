@@ -1,0 +1,9 @@
+,pid,condition,timing,block,hand,RT
+0,sha1,control,pre,0,left,2.58509602
+1,sha1,control,pre,0,right,0.792075139
+0,sha1,control,Day1,0,right,1.792075139
+1,sha1,control,Day1,0,left,7.007028914
+0,sha1,control,Day2,0,right,8.007028914
+1,sha1,control,Day2,0,left,1.073648083
+0,sha1,control,Day3,0,right,29.74450414
+1,sha1,control,Day3,0,left,0.902301155
