@@ -45,6 +45,7 @@ def flandars_test():
 
 def PT(handed):
     instruction.inst_PT('pre')
+    #instruction.inst_PT()
     PT_result = performance_test(win, components, instruction, 'pre', handed)
     instruction.PresentText(text='Finish', sound='otsukaresama')
     PT_result.insert(0, 'condition', condition)
@@ -86,6 +87,7 @@ if __name__ == '__main__':
 
     intro()
     handed = flandars_test()
+    #handed = 'right'
     PT(handed)
 
     event.waitKeys(keyList=['space'])

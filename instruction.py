@@ -213,4 +213,4 @@ if __name__ == '__main__':
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
     #instruction.inst_training('continuous')
-    instruction.viz_circle(float('inf'))
+    instruction.inst_training('continuous')

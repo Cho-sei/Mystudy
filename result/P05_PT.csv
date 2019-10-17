@@ -1,0 +1,11 @@
+,pid,condition,timing,trial,hand,PTime
+0,P05,continuous,pre,0,right,20.344588142328575
+1,P05,continuous,pre,0,left,25.462853078184708
+2,P05,continuous,pre,1,right,20.966913565873256
+3,P05,continuous,pre,1,left,22.139774546310946
+4,P05,continuous,pre,2,right,20.40259828310809
+5,P05,continuous,pre,2,left,24.146768981019704
+6,P05,continuous,pre,3,right,19.618702949879662
+7,P05,continuous,pre,3,left,21.060769226940465
+8,P05,continuous,pre,4,right,17.36896792250991
+9,P05,continuous,pre,4,left,20.355677730462048

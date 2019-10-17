@@ -47,7 +47,7 @@ def training():
 	instruction.inst_training()
 	trigger.SendTrigger('training_start')
 	if condition == 'control':
-		nfb_control.control_task(win, components, pid=pid, day=day)
+		nfb_control.control_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
 	elif condition == 'discrete':
 		nfb_discrete_every.discrete_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
 	else:

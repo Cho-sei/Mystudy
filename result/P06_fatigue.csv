@@ -1,0 +1,11 @@
+,pid,condition,day,block,fatigue,concentrate,difficulty,prediction
+0,P06,continuous,Day1,0,2,5,3,70
+1,P06,continuous,Day1,1,3,5,3,70
+2,P06,continuous,Day1,2,4,4,4,68
+3,P06,continuous,Day1,3,4,5,3,72
+4,P06,continuous,Day1,4,5,3,5,63
+0,P06,continuous,Day2,0,5,5,3,70
+1,P06,continuous,Day2,1,5,5,4,70
+2,P06,continuous,Day2,2,5,3,5,65
+3,P06,continuous,Day2,3,5,3,5,65
+4,P06,continuous,Day2,4,5,5,4,70

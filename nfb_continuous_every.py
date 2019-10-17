@@ -178,7 +178,7 @@ def continuous_task(win, components, fmin, fmax, pid, day):
 	fatigue_df.insert(0, 'pid', pid)
 
 	summary.insert(0, 'day', day)
-	summary.insert(0, 'condition', 'control')
+	summary.insert(0, 'condition', 'continuous')
 	summary.insert(0, 'pid', pid)
 	if day == 'Day1':
 		summary.to_csv(condition_fname)

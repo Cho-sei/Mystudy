@@ -1,0 +1,9 @@
+,pid,condition,timing,hand,part,VR,KR
+0,P05,continuous,pre,right,1,2,2
+1,P05,continuous,pre,right,2,2,2
+2,P05,continuous,pre,right,3,3,2
+3,P05,continuous,pre,right,4,2,2
+4,P05,continuous,pre,right,5,3,2
+5,P05,continuous,pre,left,3,3,2
+6,P05,continuous,pre,left,4,3,2
+7,P05,continuous,pre,left,5,3,2

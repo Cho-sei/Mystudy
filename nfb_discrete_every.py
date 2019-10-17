@@ -22,10 +22,20 @@ from record_baseline_every import baseline as bsl
 from trigger import trigger
 from experiment_parameter import MIexperiment_components
 
-
 #データ取得と更新
 class discrete_DataAquisition(BetaInlet):
-	def DataAquisition4discrete(self, electrode, win, components, dummy):
+	def initialize(self):
+		self.epoch_buffer = deque([], maxlen=components.N)
+		self.epoch_buffer_blink = deque([], maxlen=components.N)
+
+		#data_bufferの初期化
+		while len(self.epoch_buffer) < components.N:	
+			sample, timestamp = self.update()
+			if len(sample) != 0:
+				ROI = components.channels['C4'] if components.df.iloc[[0]].hand.item() == 'left' else components.channels['C3']
+				self.epoch_buffer.extend(sample.T[ROI])
+
+	def DataAquisition4discrete(self, electrode, win, components, dummy, base):
 		data_buffer = []
 		self.update()
 
@@ -35,11 +45,28 @@ class discrete_DataAquisition(BetaInlet):
 
 		i = 0
 		pre_time = 0
+		ERSP_list = []
+		firstFlag = True
 		waiting_key = True
 		while waiting_key:	
 			sample, timestamp = self.update()
 			if len(sample) != 0:
 				data_buffer.extend(sample.T[electrode])
+				self.epoch_buffer.extend(sample.T[electrode])
+				self.epoch_buffer_blink.extend(sample.T[1])
+			display_buffer = detrend(self.epoch_buffer)
+			display_buffer_blink = detrend(self.epoch_buffer_blink)
+			if any(display_buffer_blink > 100):
+				if firstFlag:
+					ERSP = 0
+					firstFlag = False
+				else:
+					ERSP = pre_data
+			else:
+				psd, freqs = psd_array_multitaper(display_buffer, self.sampling_rate(), fmin=8, fmax=13)
+				ERSP = 100 * (np.average(psd) - base) / base
+			ERSP_list.append(ERSP)
+
 			t_duration = clock.getTime() - t_start
 
 			components.Circle.setRadius(5*dummy[i] + 300)
@@ -58,14 +85,17 @@ class discrete_DataAquisition(BetaInlet):
 			if 'return' in event.getKeys(keyList=['return']):
 				RT = t_duration
 				waiting_key = False
+
+			pre_data = ERSP
 			
 		detrend_buffer = detrend(data_buffer)
 		
-		return detrend_buffer, RT
+		return detrend_buffer, RT, ERSP_list
 	
 
 def discrete_task(win, components, fmin, fmax, pid, day):
 	discrete_betaIn = discrete_DataAquisition()
+	discrete_betaIn.initialize()
 
 	eeg_fname = 'result/' + pid + '_discrete_eeg_' + day + '.csv'
 	condition_fname = 'result/' + pid + '_discrete_trainig.csv'
@@ -75,7 +105,7 @@ def discrete_task(win, components, fmin, fmax, pid, day):
 		os.remove(eeg_fname)
 
 	summary = pd.DataFrame()
-	pre_baseline = [500, 500]
+	pre_baseline = pd.DataFrame({'C4':[500], 'C3':[500]})
 	fatigue_res = []
 	concentrate_res = []
 	difficulty_res = []
@@ -97,6 +127,8 @@ def discrete_task(win, components, fmin, fmax, pid, day):
 	core.wait(components.ready_duration)
 
 	for blocks in range(components.blockNum):
+
+		ERSP_fname = 'result/' + pid + '_discrete_ERSP_' + day + '_b' + str(blocks) + '.csv'
 
 		components.df['block'] = blocks
 
@@ -122,8 +154,8 @@ def discrete_task(win, components, fmin, fmax, pid, day):
 				components.fixation.draw()
 				win.flip()
 
-				task_data, RT = discrete_betaIn.DataAquisition4discrete(components.channels['C4'], win, components, dummy[blocks][i])
 				base = baseline['C4']
+				task_data, RT, ERSP_List = discrete_betaIn.DataAquisition4discrete(components.channels['C4'], win, components, dummy[blocks][i], base)
 
 			else:
 				trigger.SendTrigger('relax_right_b' + str(blocks+1))
@@ -141,8 +173,12 @@ def discrete_task(win, components, fmin, fmax, pid, day):
 				components.fixation.draw()
 				win.flip()
 
-				task_data, RT = discrete_betaIn.DataAquisition4discrete(components.channels['C3'], win, components, dummy[blocks][i])
 				base = baseline['C3']
+				task_data, RT, ERSP_List = discrete_betaIn.DataAquisition4discrete(components.channels['C3'], win, components, dummy[blocks][i], base)
+				
+			with open(ERSP_fname, 'a') as f:
+				writer = csv.writer(f, lineterminator='\n')
+				writer.writerow(ERSP_List)
 
 			pre_baseline = baseline
 			
