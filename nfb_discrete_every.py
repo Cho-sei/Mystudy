@@ -220,6 +220,8 @@ def discrete_task(win, components, fmin, fmax, pid, day):
 		prediction_res.append(fatigue_return[3])
 		components.rest(win, blocks+2)
 
+		print(fatigue_return)
+
 		components.df['ERD'] = ERD_list
 		components.df['steps'] = steps_list
 		components.df['RT'] = RT_list

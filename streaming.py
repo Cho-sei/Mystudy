@@ -46,6 +46,7 @@ class BetaInlet(object):
 			t_duration = time.perf_counter() - t_start
 
 		for ch in data:
-			data[ch] = detrend(data[ch])
+			if len(sample) != 0:
+				data[ch] = detrend(data[ch])
 
 		return data

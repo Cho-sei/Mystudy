@@ -165,6 +165,8 @@ def continuous_task(win, components, fmin, fmax, pid, day):
 		prediction_res.append(fatigue_return[3])
 		components.rest(win, blocks+2)
 
+		print(fatigue_return)
+
 		components.df['RT'] = RT
 		summary = pd.concat([summary, components.df])
 

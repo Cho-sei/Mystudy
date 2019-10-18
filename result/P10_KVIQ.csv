@@ -1,0 +1,9 @@
+,pid,condition,timing,hand,part,VR,KR
+0,P10,control,pre,right,1,5,4
+1,P10,control,pre,right,2,3,3
+2,P10,control,pre,right,3,5,5
+3,P10,control,pre,right,4,5,4
+4,P10,control,pre,right,5,4,4
+5,P10,control,pre,left,3,3,3
+6,P10,control,pre,left,4,4,4
+7,P10,control,pre,left,5,5,5
