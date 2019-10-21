@@ -1,0 +1,9 @@
+,pid,condition,timing,hand,part,VR,KR
+0,P11,continuous,pre,right,1,5,4
+1,P11,continuous,pre,right,2,5,3
+2,P11,continuous,pre,right,3,4,3
+3,P11,continuous,pre,right,4,5,4
+4,P11,continuous,pre,right,5,4,3
+5,P11,continuous,pre,left,3,3,2
+6,P11,continuous,pre,left,4,4,3
+7,P11,continuous,pre,left,5,4,4
