@@ -5,7 +5,6 @@ Mitest_pre_relaxleft,3
 Mitest_pre_taskleft,4
 Mitest_pre_relaxright,5
 Mitest_pre_taskright,6
-baseline,7
 training_start,8
 relax_left_b1,9
 task_left_b1,10
