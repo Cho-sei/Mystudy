@@ -7,3 +7,11 @@
 5,P03,continuous,pre,left,3,5,4
 6,P03,continuous,pre,left,4,2,2
 7,P03,continuous,pre,left,5,5,4
+0,P03,continuous,post,right,1,4,4
+1,P03,continuous,post,right,2,4,3
+2,P03,continuous,post,right,3,4,4
+3,P03,continuous,post,right,4,4,2
+4,P03,continuous,post,right,5,5,4
+5,P03,continuous,post,left,3,4,4
+6,P03,continuous,post,left,4,3,2
+7,P03,continuous,post,left,5,5,4

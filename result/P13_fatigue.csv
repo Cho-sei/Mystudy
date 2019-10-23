@@ -1,0 +1,6 @@
+,pid,condition,day,block,fatigue,concentrate,difficulty,prediction
+0,P13,control,Day1,0,5,3,6,70
+1,P13,control,Day1,1,4,4,5,70
+2,P13,control,Day1,2,5,5,4,70
+3,P13,control,Day1,3,6,4,5,70
+4,P13,control,Day1,4,6,4,5,65
