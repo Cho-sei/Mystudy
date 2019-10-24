@@ -7,3 +7,11 @@
 5,P08,control,pre,left,3,5,4
 6,P08,control,pre,left,4,5,5
 7,P08,control,pre,left,5,5,5
+0,P08,control,post,right,1,5,5
+1,P08,control,post,right,2,5,5
+2,P08,control,post,right,3,5,5
+3,P08,control,post,right,4,5,5
+4,P08,control,post,right,5,5,5
+5,P08,control,post,left,3,5,5
+6,P08,control,post,left,4,5,5
+7,P08,control,post,left,5,5,5
