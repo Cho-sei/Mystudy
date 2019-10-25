@@ -7,3 +7,11 @@
 5,P09,control,pre,left,3,4,4
 6,P09,control,pre,left,4,4,3
 7,P09,control,pre,left,5,3,2
+0,P09,control,post,right,1,4,4
+1,P09,control,post,right,2,5,4
+2,P09,control,post,right,3,4,3
+3,P09,control,post,right,4,4,3
+4,P09,control,post,right,5,5,4
+5,P09,control,post,left,3,4,3
+6,P09,control,post,left,4,4,3
+7,P09,control,post,left,5,4,4
