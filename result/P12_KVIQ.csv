@@ -7,3 +7,11 @@
 5,P12,continuous,pre,left,3,5,5
 6,P12,continuous,pre,left,4,5,5
 7,P12,continuous,pre,left,5,5,5
+0,P12,continuous,post,right,1,5,5
+1,P12,continuous,post,right,2,5,5
+2,P12,continuous,post,right,3,4,5
+3,P12,continuous,post,right,4,5,4
+4,P12,continuous,post,right,5,5,5
+5,P12,continuous,post,left,3,5,4
+6,P12,continuous,post,left,4,5,3
+7,P12,continuous,post,left,5,5,5
