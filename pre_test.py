@@ -12,8 +12,10 @@ from performance_test import performance_test
 
 pid = sys.argv[1]
 
-p_info = pd.read_csv('participants_data.csv')
-condition = p_info[p_info['pid'] == pid]['condition'].item()
+#p_info = pd.read_csv('participants_data.csv')
+#condition = p_info[p_info['pid'] == pid]['condition'].item()
+
+condition = 'continuous'
 
 event.globalKeys.add(key='escape', func=core.quit)
 
@@ -85,16 +87,16 @@ if __name__ == '__main__':
 
     event.waitKeys(keyList=['space'])
 
-    intro()
+    #intro()
     handed = flandars_test()
     #handed = 'right'
-    PT(handed)
+    #PT(handed)
 
     event.waitKeys(keyList=['space'])
     
     KVIQ_test(handed)
     MR()
-    inst()
+    #inst()
     rest()
 
     event.waitKeys(keyList=['space'])
