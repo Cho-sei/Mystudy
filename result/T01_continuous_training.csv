@@ -1,0 +1,11 @@
+,pid,hand,lateral,day,trial,RT,timing,block
+0,T01,right,right,Day1,0,1.4507192415185273,pre,0
+1,T01,right,right,Day1,1,1.924735505366698,pre,0
+0,T01,right,right,Day1,0,0.512525747762993,pre,1
+1,T01,right,right,Day1,1,0.9193903498817235,pre,1
+0,T01,right,right,Day1,0,0.025182579876855016,pre,2
+1,T01,right,right,Day1,1,0.49730146233923733,pre,2
+0,T01,right,right,Day1,0,0.45552720804698765,pre,3
+1,T01,right,right,Day1,1,0.6659170016646385,pre,3
+0,T01,right,right,Day1,0,0.3843288973439485,pre,4
+1,T01,right,right,Day1,1,0.43004904594272375,pre,4

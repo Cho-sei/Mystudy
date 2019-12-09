@@ -13,7 +13,7 @@ class instruction():
         soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
         self.soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 23)] 
+        imgnameList = ['day_flow/スライド' + str(i) for i in range(1, 24)] 
         imgnameList.append('back_right_0')
         self.imgDict = dict([[imgname, visual.ImageStim(self.win, 'InstImage/' + imgname + '.PNG')] for imgname in imgnameList])
         
@@ -113,26 +113,20 @@ class instruction():
     def inst_train_proc(self):
         self.PresentImg(img='day_flow/スライド4', sound='inst_training_proc')
     
-    def inst_MItest(self, timing=None):
-        if timing == 'pre':
-            self.PresentText(text=u'運動イメージ課題', sound='into_inst_MItest')            
+    def inst_MItest(self, lateral=None, timing=None):
+        if (timing == 'pre') & (lateral != None):
+            if lateral == 'right':
+                self.PresentText(text=u'運動イメージ課題', sound='into_inst_MItest_right')            
+            else:
+                self.PresentText(text=u'運動イメージ課題', sound='into_inst_MItest_left')            
             self.PresentText(text='Relax', sound='viz_relax')
-            self.PresentImg(img='day_flow/スライド21', sound='inst_cue')
             self.components.fixation.draw()
             self.win.flip()
             self.PlaySound('viz_fixation')
             self.PresentText(text='Relax', sound='repeat')
             self.PresentText(text=u'練習', sound='into_prac')
             self.PresentText(text='Relax', sound='prac_relax', wait_time=2)
-            self.PresentText(text='Left', sound='prac_left_cue', wait_time=2)
-            self.PlaySound('prac_left_MI', wait_time=2)
-            self.components.fixation.draw()
-            self.win.flip()
-            event.waitKeys(keyList=['return'])
-            self.PresentText(text='', sound='otsukaresama')
-            self.PresentText(text='Relax', sound='prac_relax_rep', wait_time=2)
-            self.PresentText(text='Right', sound='prac_right_cue', wait_time=2)
-            self.PlaySound('prac_right_MI', wait_time=2)
+            self.PlaySound('prac_MI', wait_time=2)
             self.components.fixation.draw()
             self.win.flip()
             event.waitKeys(keyList=['return'])
@@ -145,20 +139,15 @@ class instruction():
         self.PresentText(text=u'安静時脳波の測定', sound='inst_resting')
         self.PresentText(text='Ready', sound='start')
     
-    def inst_training(self, condition=None):
-        if condition != None:
+    def inst_training(self, lateral=None):
+        if lateral != None:
             self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_inst_training')
-            self.PresentImg(img='day_flow/スライド22', sound='inst_training_flow')
-            if condition == 'control':
-                self.soundDict['FB_control'].play()
-                self.viz_circle(self.soundDict['FB_control'].getDuration() + 1)
-            elif condition == 'discrete':
-                self.soundDict['FB_discrete'].play()
-                self.viz_circle(self.soundDict['FB_discrete'].getDuration() + 1)
-                self.PresentText(text=' GOOD!\n  or\nBAD...', sound='FB_discrete_FB')
+            if lateral == 'right':
+                self.PresentImg(img='day_flow/スライド23', sound='inst_training_right')
             else:
-                self.soundDict['FB_NFB'].play()
-                self.viz_circle(self.soundDict['FB_NFB'].getDuration() + 1)
+                self.PresentImg(img='day_flow/スライド23', sound='inst_training_left')
+            self.soundDict['FB_NFB'].play()
+            self.viz_circle(self.soundDict['FB_NFB'].getDuration() + 1)
             self.PresentText(text='', sound='confirmation')
         else:
             self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_training')
@@ -213,4 +202,4 @@ if __name__ == '__main__':
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
     #instruction.inst_training('continuous')
-    instruction.inst_training('continuous')
+    instruction.inst_training('left')

@@ -22,7 +22,7 @@ import random
 from trigger import trigger
 from experiment_parameter import MIexperiment_components
 
-def continuous_task(win, components, fmin, fmax, pid, day):
+def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 
 	condition_fname = 'result/' + pid + '_continuous_training.csv'
 	fatigue_fname = 'result/' + pid + '_fatigue.csv'
@@ -43,7 +43,7 @@ def continuous_task(win, components, fmin, fmax, pid, day):
 	while len(data_buffer) < components.N:	
 		sample, timestamp = betaIn.update()
 		if len(sample) != 0:
-			ROI = components.channels['C4'] if components.df.iloc[[0]].hand.item() == 'left' else components.channels['C3']
+			ROI = components.channels['C4'] if hand == 'left' else components.channels['C3']
 			data_buffer.extend(sample.T[ROI])
 	
 	
@@ -68,43 +68,23 @@ def continuous_task(win, components, fmin, fmax, pid, day):
 
 		RT = []
 		for i,row in components.df.iterrows():		
-			if row['hand'] == 'left':
-				trigger.SendTrigger('relax_left_b' + str(blocks+1))
-				components.msg.setText('Relax')
-				components.msg.draw()
-				win.flip()
+			trigger.SendTrigger('relax_b' + str(blocks+1))
+			components.msg.setText('Relax')
+			components.msg.draw()
+			win.flip()
 
-				baseline = bsl(win, components, fmin, fmax, pid, day, blocks, i, pre_baseline)
+			baseline = bsl(win, components, fmin, fmax, pid, day, blocks, i, pre_baseline)
 
-				components.cue.setText('Left')
-				components.cue.draw()
-				win.flip()
-				core.wait(components.cue_duration)
-				trigger.SendTrigger('task_left_b' + str(blocks+1))
-				components.fixation.draw()
-				win.flip()
+			trigger.SendTrigger('task_b' + str(blocks+1))
+			components.fixation.draw()
+			win.flip()
 
-				ch = components.channels['C4']
-				base = baseline['C4']
-
-			else:
-				trigger.SendTrigger('relax_right_b' + str(blocks+1))
-				components.msg.setText('Relax')
-				components.msg.draw()
-				win.flip()
-
-				baseline = bsl(win, components, fmin, fmax, pid, day, blocks, i, pre_baseline)
-
-				components.cue.setText('Right')
-				components.cue.draw()
-				win.flip()
-				core.wait(components.cue_duration)
-				trigger.SendTrigger('task_right_b' + str(blocks+1))
-				components.fixation.draw()
-				win.flip()
-
+			if hand == 'right':
 				ch = components.channels['C3']
 				base = baseline['C3']
+			else:
+				ch = components.channels['C4']
+				base = baseline['C4']
 
 			pre_baseline = baseline
 
@@ -176,11 +156,13 @@ def continuous_task(win, components, fmin, fmax, pid, day):
 							   'prediction':prediction_res})
 	fatigue_df.insert(0, 'block', range(components.blockNum))
 	fatigue_df.insert(0, 'day', day)
-	fatigue_df.insert(0, 'condition', 'continuous')
+	fatigue_df.insert(0, 'lateral', lateral)
+	fatigue_df.insert(0, 'hand', hand)
 	fatigue_df.insert(0, 'pid', pid)
 
 	summary.insert(0, 'day', day)
-	summary.insert(0, 'condition', 'continuous')
+	summary.insert(0, 'lateral', lateral)
+	summary.insert(0, 'hand', hand)
 	summary.insert(0, 'pid', pid)
 	if day == 'Day1':
 		summary.to_csv(condition_fname)
@@ -206,4 +188,4 @@ if __name__ == '__main__':
 		size=(1920, 1080), units='pix', fullscr=True, allowGUI=False)
 	components = MIexperiment_components(win)
 
-	continuous_task(win, components, fmin=8, fmax=13, pid=sys.argv[1], day=sys.argv[2])
+	continuous_task(win, components, 'right', 'right', fmin=8, fmax=13, pid=sys.argv[1], day=sys.argv[2])

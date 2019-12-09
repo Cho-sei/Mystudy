@@ -1,0 +1,6 @@
+,pid,hand,lateral,day,block,fatigue,concentrate,difficulty,prediction
+0,T01,right,right,Day1,0,4,4,4,1
+1,T01,right,right,Day1,1,3,4,4,1
+2,T01,right,right,Day1,2,4,4,4,5
+3,T01,right,right,Day1,3,5,4,4,2
+4,T01,right,right,Day1,4,4,4,5,3

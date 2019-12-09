@@ -14,7 +14,8 @@ pid = sys.argv[1]
 day = sys.argv[2]
 
 p_info = pd.read_csv('participants_data.csv')
-condition = p_info[p_info['pid'] == pid]['condition'].item()
+lateral = p_info[p_info['pid'] == pid]['lateral'].item()
+hand = p_info[p_info['pid'] == pid]['hand'].item()
 
 event.globalKeys.add(key='escape', func=core.quit)
 
@@ -35,7 +36,8 @@ def MItask(timing):
 	MI_result = Motor_Imagery_task.MI_task(win, components, timing)
 	instruction.PresentText(text='Finish', sound='otsukaresama')
 	MI_result.insert(0, 'day', day)
-	MI_result.insert(0, 'condition', condition)
+	MI_result.insert(0, 'lateral', lateral)
+	MI_result.insert(0, 'hand', hand)
 	MI_result.insert(0, 'pid', pid)
 	if (day == 'Day1') & (timing == 'pre'):
 		MI_result.to_csv('result/' + pid + '_MItask.csv')
@@ -46,12 +48,7 @@ def MItask(timing):
 def training():
 	instruction.inst_training()
 	trigger.SendTrigger('training_start')
-	if condition == 'control':
-		nfb_control.control_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
-	elif condition == 'discrete':
-		nfb_discrete_every.discrete_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
-	else:
-		nfb_continuous_every.continuous_task(win, components, fmin=8, fmax=13, pid=pid, day=day)
+	nfb_continuous_every.continuous_task(win, components, lateral, hand, fmin=8, fmax=13, pid=pid, day=day)
 
 if __name__ == '__main__':
 

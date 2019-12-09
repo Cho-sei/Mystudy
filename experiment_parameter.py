@@ -22,10 +22,9 @@ class MIexperiment_components(object):
         self.blockNum = 5
         self.ready_duration = 1         
         self.relax_duration = 5         
-        self.rest_duration = 60       
-        self.trialNum = 5
-        self.baseline_duration = 5
-        self.MItask_trial = 5
+        self.rest_duration = 10       
+        self.trialNum = 2
+        self.baseline_duration = 2
         self.MRtrial = 3
         self.PTtrial = 5
         self.FB_duration = 1.5
@@ -34,15 +33,8 @@ class MIexperiment_components(object):
         self.wait_time_list = [.6, .7, .8, .9, 1]
 
         #DataFrame
-        conditions = list(itertools.product(
-            range(self.trialNum),
-            ('left', 'right'),
-        ))
-        self.df = pd.DataFrame(
-            conditions, columns=('block', 'hand'))
-        self.df = self.df.sample(frac=1)
-        self.df.sort_values('block', inplace=True)
-        self.df.reset_index(drop=True, inplace=True)
+        conditions = list(range(self.trialNum))
+        self.df = pd.DataFrame({'trial': conditions})
 
         #psychopy初期化
         self.msg = visual.TextStim(win, height=80)
