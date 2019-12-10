@@ -32,4 +32,4 @@ def trigger_thread(ser, sendValue):
 trigger = Trigger()
 
 if __name__ == '__main__':
-    trigger = Trigger()
+    trigger.SendTrigger('start')
