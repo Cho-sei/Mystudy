@@ -1,3 +1,8 @@
 ,pid,hand,lateral,day,timing,trial,RT
-0,T01,right,right,Day1,pre,0,0.8978498575743288
-1,T01,right,right,Day1,pre,1,0.6231691248249263
+0,T01,right,right,Day1,pre,0,0.5475992809515446
+0,T01,right,right,Day2,pre,0,1.9090228667482727
+0,T01,right,right,Day2,post,0,0.4863818830344826
+0,T01,right,right,Day2,pre,0,0.7432711343280971
+0,T01,right,right,Day2,pre,0,1.8734157434664669
+0,T01,right,right,Day2,pre,0,1.4174109769519418
+0,T01,right,right,Day2,post,0,0.47776681696996093

@@ -8,7 +8,7 @@ from experiment_parameter import MIexperiment_components
 from instruction import instruction
 from mental_rotation import hand_lateralization_task
 from performance_test import performance_test
-from fatigue import pre_ques
+from fatigue import attribute_question
 
 
 pid = sys.argv[1]
@@ -16,6 +16,7 @@ pid = sys.argv[1]
 p_info = pd.read_csv('participants_data.csv')
 
 lateral = p_info[p_info['pid'] == pid]['lateral'].item()
+hand = p_info[p_info['pid'] == pid]['hand'].item()
 
 event.globalKeys.add(key='escape', func=core.quit)
 
@@ -27,6 +28,17 @@ instruction = instruction(win, components)
 
 def intro():
     instruction.introduction('Day1')
+
+def questionnaire():
+    instruction.inst_questionnaire('pre')
+    answers = attribute_question(win, components)
+    ques_df = pd.DataFrame(columns=answers.index)
+    ques_df = ques_df.append(answers, ignore_index=True)
+    ques_df.insert(0, 'timing', 'pre')
+    ques_df.insert(0, 'lateral', lateral)
+    ques_df.insert(0, 'hand', hand)
+    ques_df.insert(0, 'pid', pid)
+    ques_df.to_csv('result/' + pid + '_pre_questionnaire.csv')
 
 def flandars_test():
     instruction.inst_flandars()
@@ -92,13 +104,9 @@ if __name__ == '__main__':
     event.waitKeys(keyList=['space'])
 
     intro()
-    handed = flandars_test()
-    pre_questionnaire()
-    #handed = 'right'
-    #PT(handed)
-    
-    KVIQ_test(handed)
-    MR()
+
+    questionnaire()
+
     inst()
     rest()
 

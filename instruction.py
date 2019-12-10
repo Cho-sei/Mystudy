@@ -31,7 +31,20 @@ class instruction():
             self.PresentImg(img='day_flow/スライド2', sound='ex_flow_into_day2')
         else:
             self.PresentImg(img='day_flow/スライド3', sound='ex_flow_into_day3')
-        
+    
+    def inst_questionnaire(self, timing=None):
+        if timing != None:
+            ratingScale = visual.RatingScale(
+                self.win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], pos=(0.0, -200),
+                scale=False, showValue=False, acceptPreText='Enter', acceptText='Enter',
+                markerStart=0, leftKeys='num_1', rightKeys = 'num_3', acceptKeys='return',
+                marker=visual.TextStim(self.win, text=u'「1」 ⇦ ▼ ⇨ 「3」\n\n', units='norm'), noMouse=True)
+            ratingScale.draw()
+            self.PresentText(text=u'アンケート', sound='inst_questionnaire')
+        else:
+            self.PresentText(text=u'アンケート', sound='into_questionnaire')
+        self.PresentText(text='Ready', sound='start')
+
     def inst_flandars(self):
         ratingScale = visual.RatingScale(
             self.win, low=-1, high=1, labels=[u'左', u'どちらも', u'右'], pos=(0.0, -200),

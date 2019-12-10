@@ -24,8 +24,8 @@ from experiment_parameter import MIexperiment_components
 
 def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 
-	condition_fname = 'result/' + pid + '_continuous_training.csv'
-	fatigue_fname = 'result/' + pid + '_fatigue.csv'
+	condition_fname = 'result/' + pid + '_continuous_training_' + day + '.csv'
+	fatigue_fname = 'result/' + pid + '_block_questionnaire_' + day + '.csv'
 	
 	betaIn = BetaInlet()
 
@@ -34,16 +34,24 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 	summary = pd.DataFrame()
 	pre_baseline = pd.DataFrame({'C4':[500], 'C3':[500]})
 
+	if hand == 'right':
+		el = 'C3'
+	else:
+		el = 'C4'
+
 	fatigue_res = []
 	concentrate_res = []
 	difficulty_res = []
 	prediction_res = []
+	sleepiness_res = []
+	visualScale = []
+	kinethesticScale = []
 
 	#data_bufferの初期化
 	while len(data_buffer) < components.N:	
 		sample, timestamp = betaIn.update()
 		if len(sample) != 0:
-			ROI = components.channels['C4'] if hand == 'left' else components.channels['C3']
+			ROI = components.channels[el]
 			data_buffer.extend(sample.T[ROI])
 	
 	
@@ -79,12 +87,8 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 			components.fixation.draw()
 			win.flip()
 
-			if hand == 'right':
-				ch = components.channels['C3']
-				base = baseline['C3']
-			else:
-				ch = components.channels['C4']
-				base = baseline['C4']
+			ch = components.channels[el]
+			base = baseline[el]
 
 			pre_baseline = baseline
 
@@ -139,10 +143,13 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 				writer.writerow('\n')
 
 		fatigue_return = fatigue_VAS(win, components)
-		fatigue_res.append(fatigue_return[0])
-		concentrate_res.append(fatigue_return[1])
-		difficulty_res.append(fatigue_return[2])
-		prediction_res.append(fatigue_return[3])
+		fatigue_res.append(fatigue_return['fatigue'])
+		concentrate_res.append(fatigue_return['concentrate'])
+		difficulty_res.append(fatigue_return['difficulty'])
+		prediction_res.append(fatigue_return['prediction'])
+		sleepiness_res.append(fatigue_return['sleepiness'])
+		visualScale.append(fatigue_return['VisualScale'])
+		kinethesticScale.append(fatigue_return['KinethesticScale'])
 		components.rest(win, blocks+2)
 
 		print(fatigue_return)
@@ -153,7 +160,10 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 	fatigue_df = pd.DataFrame({'fatigue':fatigue_res, 
 							   'concentrate':concentrate_res,
 							   'difficulty':difficulty_res,
-							   'prediction':prediction_res})
+							   'prediction':prediction_res, 
+							   'sleepiness':sleepiness_res,
+							   'visualScale':visualScale,
+							   'kinethesticScale':kinethesticScale})
 	fatigue_df.insert(0, 'block', range(components.blockNum))
 	fatigue_df.insert(0, 'day', day)
 	fatigue_df.insert(0, 'lateral', lateral)
@@ -164,20 +174,9 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 	summary.insert(0, 'lateral', lateral)
 	summary.insert(0, 'hand', hand)
 	summary.insert(0, 'pid', pid)
-	if day == 'Day1':
-		summary.to_csv(condition_fname)
-		fatigue_df.to_csv(fatigue_fname)
-	else:
-		if os.path.exists(fatigue_fname):
-			fat_df = pd.read_csv(fatigue_fname, index_col=0)
-			pd.concat([fat_df, fatigue_df], sort=False).to_csv(fatigue_fname)
-		else:
-			fatigue_df.to_csv(fatigue_fname)
-		if os.path.exists(condition_fname):
-			train_df = pd.read_csv(condition_fname, index_col=0)
-			pd.concat([train_df, summary]).to_csv(condition_fname)
-		else:
-			summary.to_csv(condition_fname)
+	
+	summary.to_csv(condition_fname)
+	fatigue_df.to_csv(fatigue_fname)
 		
 	core.wait(1)
 

@@ -15,6 +15,7 @@ pid = sys.argv[1]
 
 p_info = pd.read_csv('participants_data.csv')
 lateral = p_info[p_info['pid'] == pid]['lateral'].item()
+hand = p_info[p_info['pid'] == pid]['hand'].item()
 
 event.globalKeys.add(key='escape', func=core.quit)
 
@@ -22,14 +23,16 @@ win = visual.Window(units='pix', fullscr=True, allowGUI=False)
 components = MIexperiment_components(win)
 instruction = instruction(win, components)
 
-handedDf = pd.read_csv('result/' + pid + '_FlandarsTest.csv')
-if handedDf['response'].sum() < -4:
-    handed = 'left'
-elif handedDf['response'].sum() > 4:
-    handed = 'right'
-else:
-    handed = 'both'
-
+def questionnaire():
+    instruction.inst_questionnaire()
+    answers = attribute_question(win, components)
+    ques_df = pd.DataFrame(columns=answers.index)
+    ques_df = ques_df.append(answers, ignore_index=True)
+    ques_df.insert(0, 'timing', 'post')
+    ques_df.insert(0, 'lateral', lateral)
+    ques_df.insert(0, 'hand', hand)
+    ques_df.insert(0, 'pid', pid)
+    ques_df.to_csv('result/' + pid + '_post_questionnaire.csv')
 
 def PT():
     instruction.inst_PT()
@@ -69,12 +72,10 @@ if __name__ == '__main__':
 
     event.waitKeys(keyList=['space'])
 
-    #PT()
+    questionnaire()
 
-    #event.waitKeys(keyList=['space'])
-
-    KVIQ_test()
-    MR()
+    #KVIQ_test()
+    #MR()
     ex_finish()
 
     event.waitKeys(keyList=['space'])

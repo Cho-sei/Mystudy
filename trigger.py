@@ -1,4 +1,5 @@
 import serial
+import serial.tools.list_ports
 import threading
 import time
 from tqdm import tqdm
@@ -7,10 +8,16 @@ import sys
 import itertools
 
 class Trigger(object):
-    def __init__(self, portname='COM8', baudrate=57600):
-        self.ser = serial.Serial(portname, baudrate)
-        trigger_thread(self.ser, b'\x00')
-        self.TriggerTable = pd.read_csv('trigger_table.csv', index_col=0)
+    def __init__(self, baudrate=57600):
+        for com in ['COM' + str(num) for num in range(10)]:
+            try:
+                self.ser = serial.Serial(com, baudrate)
+            except:
+                continue
+            else:
+                print(com)
+                trigger_thread(self.ser, b'\x00')
+                self.TriggerTable = pd.read_csv('trigger_table.csv', index_col=0)
     
     def SendTrigger(self, value):
         trigger_onset = threading.Thread(
@@ -25,7 +32,4 @@ def trigger_thread(ser, sendValue):
 trigger = Trigger()
 
 if __name__ == '__main__':
-    for i, row in pd.read_csv('trigger_table.csv').iterrows():
-        print(row['label'], row['trigger'])
-        trigger.SendTrigger(row['label'])
-        time.sleep(1)
+    trigger = Trigger()

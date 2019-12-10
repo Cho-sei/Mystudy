@@ -12,6 +12,10 @@ def MI_task(win, components, timing):
 
 	clock = core.Clock()
 
+	#DataFrame
+	conditions = list(range(components.trialNum))
+	df = pd.DataFrame({'trial': conditions})
+
 	#display stimulus
 	components.msg.setText('Start')
 	components.msg.draw()
@@ -20,7 +24,7 @@ def MI_task(win, components, timing):
 	core.wait(components.ready_duration)
 
 	RT = []
-	for i, row in components.df.iterrows():
+	for i, row in df.iterrows():
 		trigger.SendTrigger('Mitest_pre_relax') if timing == 'pre' else trigger.SendTrigger('Mitest_post_relax')
 		components.msg.setText('Relax')
 		components.msg.draw()
@@ -44,10 +48,10 @@ def MI_task(win, components, timing):
 	win.flip()
 	core.wait(1)
 
-	components.df['RT'] = RT
-	components.df['timing'] = timing
+	df['RT'] = RT
+	df['timing'] = timing
 
-	return components.df[['timing', 'trial', 'RT']]
+	return df[['timing', 'trial', 'RT']]
 
 if __name__ == '__main__':
 	event.globalKeys.add(key='escape', func=core.quit)

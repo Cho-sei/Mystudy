@@ -9,6 +9,7 @@ from trigger import trigger
 import pandas as pd
 from experiment_parameter import MIexperiment_components
 from instruction import instruction
+from fatigue import post_question, pre_train_question
 
 pid = sys.argv[1]
 day = sys.argv[2]
@@ -29,6 +30,17 @@ def inst():
 		instruction.inst_train_proc()
 	else:
 		instruction.introduction(day)
+
+def pre_question():
+	instruction.inst_questionnaire()
+	answers = pre_train_question(win, components)
+	ques_df = pd.DataFrame(columns=answers.index)
+	ques_df = ques_df.append(answers, ignore_index=True)
+	ques_df.insert(0, 'day', day)
+	ques_df.insert(0, 'lateral', lateral)
+	ques_df.insert(0, 'hand', hand)
+	ques_df.insert(0, 'pid', pid)
+	ques_df.to_csv('result/' + pid + '_pre_train_questionnaire_' + day + '.csv')
 
 def MItask(timing):
 	instruction.inst_MItest()
@@ -58,11 +70,24 @@ if __name__ == '__main__':
 
 	event.waitKeys(keyList=['space'])
 
-	inst()
+	#pre_question()
+	#inst()
 	MItask('pre')
-	components.rest(win, 20)
+	#components.rest(win, 20)
 	training()
 	MItask('post')
 
+	if day == 'Day3':
+		instruction.inst_questionnaire()
+		answers = post_question(win, components)
+		ques_df = pd.DataFrame(columns=answers.index)
+		ques_df = ques_df.append(answers, ignore_index=True)
+		ques_df.insert(0, 'timing', 'post')
+		ques_df.insert(0, 'lateral', lateral)
+		ques_df.insert(0, 'hand', hand)
+		ques_df.insert(0, 'pid', pid)
+		ques_df.to_csv('result/' + pid + '_post_questionnaire.csv')
+
+		instruction.inst_finish('Day3')
 
 	event.waitKeys(keyList=['space'])
