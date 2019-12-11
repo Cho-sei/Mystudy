@@ -72,8 +72,8 @@ if __name__ == '__main__':
 
 	#pre_question()
 	#inst()
-	MItask('pre')
-	#components.rest(win, 20)
+	#MItask('pre')
+	components.rest(win, 20)
 	training()
 	MItask('post')
 

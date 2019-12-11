@@ -14,7 +14,7 @@ question_list = {'fatigue':[u'現在の疲労度を\nお答えください。', 
                  'interest':[u'このトレーニングに対して\nどれほど興味をお持ちですか。', u'全く\n興味がない', u'非常に\n興味がある', 'inst_interest'],
                  'expectation':[u'このトレーニングに\nどれほど期待していますか。', u'全く\n期待していない', u'非常に\n期待している', 'inst_expectation'],
                  'motivation':[u'このトレーニングに対して\nどれほど意欲がありますか。', u'全くない', u'非常にある', 'inst_motivation'],
-                 'anxiety':[u'このトレーニングに対して\nどれほど不安を感じていますか。', u'全く感じていない', u'非常に感じている', 'inst_anxiety'],
+                 'anxiety':[u'このトレーニングに対して\n不安を感じていますか。', u'全く感じていない', u'非常に感じている', 'inst_anxiety'],
                  'sleepiness':[u'現在の眠気を\nお答えください。', u'非常に目が\n覚めている', u'非常に眠い', 'inst_sleepiness']
                  }
 
