@@ -215,4 +215,4 @@ if __name__ == '__main__':
     components = MIexperiment_components(win)
     instruction = instruction(win, components)
     #instruction.inst_training('continuous')
-    instruction.inst_training('left')
+    instruction.PlaySound('otsukaresama')

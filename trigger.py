@@ -26,7 +26,7 @@ class Trigger(object):
     
 def trigger_thread(ser, sendValue):
     ser.write(sendValue)
-    time.sleep(.01)
+    time.sleep(.05)
     ser.write(b'\x00')
 
 trigger = Trigger()
