@@ -37,7 +37,8 @@ def MI_task(win, components, timing):
 		win.flip()
 
 		t_start = clock.getTime()
-		key = event.waitKeys(keyList=['return'])
+		#--時間制御 maxWait-------------------------------------
+		key = event.waitKeys(keyList=['return'], maxWait=10)
 		RT.append(clock.getTime() - t_start)
 
 		win.flip()
