@@ -125,11 +125,6 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 					RT.append(t_duration)
 					waiting_key = False
 
-				###--時間制御----------------------------------------------
-				if t_duration > 10:
-					RT.append(t_duration)
-					waiting_key = False
-
 				pre_data = ERSP
 
 				with open(eeg_fname, 'a') as f:

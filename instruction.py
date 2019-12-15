@@ -24,13 +24,7 @@ class instruction():
                       -21.28266322, -14.12899582, -3.826137683, -22.378991, -34.31247191, -34.93116256, -37.09434031, -9.442296083, -11.458945]
 
     def introduction(self, day):
-        if day == 'Day1':
-            self.PresentText(text=u'実験開始', sound='ex_start')
-            self.PresentImg(img='day_flow/スライド1', sound='ex_flow_into_day1')
-        elif day == 'Day2':
-            self.PresentImg(img='day_flow/スライド2', sound='ex_flow_into_day2')
-        else:
-            self.PresentImg(img='day_flow/スライド3', sound='ex_flow_into_day3')
+        self.PresentText(text=u'実験開始', sound='ex_start_' + day)
     
     def inst_questionnaire(self, timing=None):
         if timing != None:
@@ -163,6 +157,7 @@ class instruction():
             self.viz_circle(self.soundDict['FB_NFB'].getDuration() + 1)
             self.PresentText(text='', sound='confirmation')
         else:
+
             self.PresentText(text=u'運動イメージ\nトレーニング', sound='into_training')
             self.PresentText(text='Ready', sound='start')
     

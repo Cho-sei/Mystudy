@@ -6,6 +6,7 @@ import numpy as np
 import winsound
 import sys
 import os
+import random
 from experiment_parameter import MIexperiment_components
 
 def demo(win, components):
@@ -25,53 +26,40 @@ def demo(win, components):
 		components.df['block'] = blocks
 
 		for i, row in components.df.iterrows():
+			
+			components.msg.setText('Relax')
+			components.msg.draw()
+			win.flip()
 
-			if row['hand'] == 'left':
-
-				components.msg.setText('Relax')
-				components.msg.draw()
-				win.flip()
-
-				core.wait(components.relax_duration)
-				
-				components.cue.setText('Left')
-				components.cue.draw()
-				win.flip()
-				core.wait(0.5)
-				components.fixation.draw()
-				win.flip()
-
-			else:
-
-				components.msg.setText('Relax')
-				components.msg.draw()
-				win.flip()
-
-				core.wait(components.relax_duration)
-				
-				components.cue.setText('Right')
-				components.cue.draw()
-				win.flip()
-				core.wait(0.5)
-				components.fixation.draw()
-				win.flip()
+			core.wait(components.relax_duration)
+			
+			components.fixation.draw()
+			win.flip()
 
 			clock = core.Clock()
 			t_start = clock.getTime()
 			t_duration = clock.getTime() - t_start
 
+			waiting_key = True
 			j = 0
-			while t_duration < components.task_duration:	
-				components.Circle.setRadius(5*dummy[blocks][i][j] + 300)
+			while waiting_key:	
+				components.Circle.setRadius(5*components.dummyList[0][blocks][i][j] + 300)
 				components.Circle.draw()
 				components.fixation.draw()
-				core.wait(components.task_duration/len(dummy[blocks][i]))
+				core.wait(.1)
 				win.flip()
 				j += 1
+				if j == len(components.dummyList[0][blocks][i]):
+					j = 0
 				t_duration = clock.getTime() - t_start
+				if 'return' in event.getKeys(keyList=['return']):
+					waiting_key = False
+
+			win.flip()
+			core.wait(components.FB_duration + random.choice(components.wait_time_list))
 
 		if blocks < components.blockNum - 1:
-			for time in reversed(range(1, self.rest_duration+1)):
+			for time in reversed(range(1, components.rest_duration+1)):
 				components.msg.setText('Rest')
 				components.msg.draw()
 				components.countText.setText(time)

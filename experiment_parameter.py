@@ -24,11 +24,7 @@ class MIexperiment_components(object):
         self.relax_duration = 5         
         self.rest_duration = 60       
         self.trialNum = 10
-        self.baseline_duration = 2
-        self.MRtrial = 3
-        self.PTtrial = 5
         self.FB_duration = 1.5
-        self.cue_duration = 3
         self.artifact_th = 100
         self.wait_time_list = [.6, .7, .8, .9, 1]
 

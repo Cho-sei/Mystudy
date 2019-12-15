@@ -28,6 +28,7 @@ instruction = instruction(win, components)
 
 def intro():
     instruction.introduction('Day1')
+    instruction.inst_train_proc()
 
 def questionnaire():
     instruction.inst_questionnaire('pre')
@@ -104,8 +105,6 @@ if __name__ == '__main__':
     event.waitKeys(keyList=['space'])
 
     intro()
-
-    questionnaire()
 
     inst()
     rest()

@@ -26,13 +26,13 @@ instruction = instruction(win, components)
 
 def inst():
 	trigger.SendTrigger('start')
-	if day == 'Day1':
-		instruction.inst_train_proc()
-	else:
-		instruction.introduction(day)
+	instruction.introduction(day)
 
 def pre_question():
-	instruction.inst_questionnaire()
+	if day == 'Day1':
+		instruction.inst_questionnaire('pre')
+	else:
+		instruction.inst_questionnaire()
 	answers = pre_train_question(win, components)
 	ques_df = pd.DataFrame(columns=answers.index)
 	ques_df = ques_df.append(answers, ignore_index=True)
@@ -70,9 +70,10 @@ if __name__ == '__main__':
 
 	event.waitKeys(keyList=['space'])
 
-	#pre_question()
-	#inst()
-	#MItask('pre')
+	if day != 'Day1':
+		inst()
+	pre_question()
+	MItask('pre')
 	components.rest(win, 20)
 	training()
 	MItask('post')

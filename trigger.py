@@ -18,6 +18,11 @@ class Trigger(object):
                 print(com)
                 trigger_thread(self.ser, b'\x00')
                 self.TriggerTable = pd.read_csv('trigger_table.csv', index_col=0)
+        
+        try:
+            self.SendTrigger('start')
+        except:
+            raise ValueError('error')
     
     def SendTrigger(self, value):
         trigger_onset = threading.Thread(
@@ -29,7 +34,18 @@ def trigger_thread(ser, sendValue):
     time.sleep(.05)
     ser.write(b'\x00')
 
-trigger = Trigger()
+
+class TestMode(object):
+    def __init__(self):
+        print('Enter Test Mode')
+
+    def SendTrigger(self, value):
+        print('Sent trigger ' + value)
+
+try:
+    trigger = Trigger()
+except:
+    trigger = TestMode()
 
 if __name__ == '__main__':
     trigger.SendTrigger('start')
