@@ -104,7 +104,7 @@ if __name__ == '__main__':
 
     event.waitKeys(keyList=['space'])
 
-    intro()
+    #intro()
 
     inst()
     rest()

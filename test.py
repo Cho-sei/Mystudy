@@ -4,11 +4,9 @@ from experiment_parameter import MIexperiment_components
 win = visual.Window(units='pix', fullscr=True, allowGUI=False)
 components = MIexperiment_components(win)
 
-keys = event.waitKeys()
-components.msg.setText(keys)
-components.msg.draw()
+components.Circle.setRadius(300)
+components.Circle.draw()
 win.flip()
 
-core.wait(1)
 
-
+event.waitKeys(keyList=['space'])
