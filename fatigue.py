@@ -8,7 +8,7 @@ import pathlib
 soundnameList = [f.stem for f in pathlib.Path('voicedata').glob('*.wav')]
 soundDict = dict([[soundname, sound.Sound('voicedata/' + soundname + '.wav')] for soundname in soundnameList])
 
-question_list = {'fatigue':[u'現在の疲労度を\nお答えください。', u'全く集中\nできていない状態', u'何もできないほど\n疲れ切っている状態', 'inst_fatigue'],
+question_list = {'fatigue':[u'現在の疲労度を\nお答えください。', u'全く疲れを\n感じない状態', u'何もできないほど\n疲れ切っている状態', 'inst_fatigue'],
                  'concentrate':[u'現在の集中度を\nお答えください。', u'全く集中\nできていない状態', u'非常によく\n集中できている状態', 'inst_concentrate'], 
                  'difficulty':[u'運動のイメージは\n難しかったですか。', u'非常に簡単', u'非常に難しい', 'inst_difficulty'], 
                  'interest':[u'このトレーニングに対して\nどれほど興味をお持ちですか。', u'全く\n興味がない', u'非常に\n興味がある', 'inst_interest'],

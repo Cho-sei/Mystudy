@@ -1,6 +1,6 @@
 pid,gender,age,hand,lateral
 T01,m,26,right,left
-T02,m,,right,left
+T02,m,31,right,left
 T03,m,21,right,left
 T04,m,24,left,right
 T05,m,27,right,left
