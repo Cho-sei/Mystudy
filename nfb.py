@@ -9,6 +9,17 @@ import msvcrt
 from scipy.signal import detrend
 from mne.time_frequency.multitaper import psd_array_multitaper
 import time
+from scipy import signal
+ 
+#バターワースフィルタ（ローパス）
+def lowpass(x, samplerate, fp, fs, gpass, gstop):
+    fn = samplerate / 2                           #ナイキスト周波数
+    wp = fp / fn                                  #ナイキスト周波数で通過域端周波数を正規化
+    ws = fs / fn                                  #ナイキスト周波数で阻止域端周波数を正規化
+    N, Wn = signal.buttord(wp, ws, gpass, gstop)  #オーダーとバターワースの正規化周波数を計算
+    b, a = signal.butter(N, Wn, "low")            #フィルタ伝達関数の分子と分母を計算
+    y = signal.filtfilt(b, a, x)                  #信号に対してフィルタをかける
+    return y                                      #フィルタ後の信号を返す
 
 channels =  {
 	'F7':0, 'Fp1':1, 'Fp2':2, 'F8':3, 'F3':4, 'Fz':5, 'F4':6, 'C3':7,
@@ -20,7 +31,7 @@ channels =  {
 #ROI_elec = 'O1'
 #ROI = channels[ROI_elec]	#見たい電極
 ROI = 7
-N = 10000
+N = 2000
 
 #データ取得と更新
 class BetaInlet(object):
@@ -73,24 +84,30 @@ if __name__ == '__main__':
     x = np.arange(0, len(display_buffer), 1)
     plt.figure(figsize=(10,6))
     plt.subplot(211)
-    f, = plt.plot(x, display_buffer)
+    #f, = plt.plot(x, display_buffer)
+    psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmax=100)
+    f, = plt.plot(freqs, psd)
+    #plt.ylim(0, 30000)
+    display_buffer = lowpass(display_buffer, betaIn.sampling_rate(), fp=40, fs=50, gpass=3, gstop=40)
     #plt.ylim(m - (m - min(display_buffer)) * 10, m + (max(display_buffer) - m) * 10)
-    psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmin=8, fmax=13)
+    psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmax=100)
     #target_band_index = np.where((freqs > fmin) & (freqs < fmax))[0]
     plt.subplot(212)
     F, = plt.plot(freqs, psd)
-    #plt.xlim(0, 60)
-    #plt.ylim(0, 1e14)
+    #plt.ylim(0, 30000)
 
     #無限プロット
     while True:
         sample, timestamp = betaIn.update()
         data_buffer.extend(sample.T[ROI])#-m
         display_buffer = detrend(data_buffer)
-        f.set_data(x, display_buffer)
+        #f.set_data(x, display_buffer)
+        psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmax=100)
+        f.set_data(freqs, psd)
+        display_buffer = lowpass(display_buffer, betaIn.sampling_rate(), fp=40, fs=50, gpass=3, gstop=40)
         #plt.ylim(m - (m - min(display_buffer)) * 10, m + (max(display_buffer) - m) * 10)
 
-        psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmin=8, fmax=13)        
+        psd, freqs = psd_array_multitaper(display_buffer, betaIn.sampling_rate(), fmax=100)        
         F.set_data(freqs, psd)
         plt.pause(1 / sampling_rate)
 

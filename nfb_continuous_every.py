@@ -21,6 +21,17 @@ import os
 import random
 from trigger import trigger
 from experiment_parameter import MIexperiment_components
+from scipy import signal
+ 
+#バターワースフィルタ（ローパス）
+def lowpass(x, samplerate, fp, fs, gpass, gstop):
+    fn = samplerate / 2                           #ナイキスト周波数
+    wp = fp / fn                                  #ナイキスト周波数で通過域端周波数を正規化
+    ws = fs / fn                                  #ナイキスト周波数で阻止域端周波数を正規化
+    N, Wn = signal.buttord(wp, ws, gpass, gstop)  #オーダーとバターワースの正規化周波数を計算
+    b, a = signal.butter(N, Wn, "low")            #フィルタ伝達関数の分子と分母を計算
+    y = signal.filtfilt(b, a, x)                  #信号に対してフィルタをかける
+    return y                                      #フィルタ後の信号を返す
 
 def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 
@@ -104,6 +115,8 @@ def continuous_task(win, components, lateral, hand, fmin, fmax, pid, day):
 				data_buffer_blink.extend(sample.T[1])
 				display_buffer = detrend(data_buffer)
 				display_buffer_blink = detrend(data_buffer_blink)
+				display_buffer = lowpass(display_buffer, betaIn.sampling_rate(), fp=40, fs=50, gpass=3, gstop=40)
+				display_buffer_blink = lowpass(display_buffer_blink, betaIn.sampling_rate(), fp=40, fs=50, gpass=3, gstop=40)
 				if any(display_buffer_blink > 100):
 					if firstFlag:
 						ERSP = 0

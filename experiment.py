@@ -72,9 +72,9 @@ if __name__ == '__main__':
 
 	if day != 'Day1':
 		inst()
-	pre_question()
-	MItask('pre')
-	components.rest(win, 20)
+	#pre_question()
+	#MItask('pre')
+	#components.rest(win, 20)
 	training()
 	MItask('post')
 
